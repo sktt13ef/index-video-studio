@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "created_by": "build_global50_plan.py",
+  "source_policy": {
+    "principle": "AI 只负责表达，不负责事实。所有成片数字必须来自结构化数据或代码计算。",
+    "ready_rule": "只有 data_status = ready 的指数才能进入视频生成。",
+    "no_empty_video_data": "成品画面不得出现未提供、暂无、数据缺失等占位表达。"
+  },
+  "source_types": {
+    "catalog": {
+      "description": "本项目自带指数目录，只能用于候选清单和初步定位。",
+      "file": "data/global_index_catalog_500.csv",
+      "allowed_for_ready": false
+    },
+    "official_index_page": {
+      "description": "指数公司官方页面，确认指数名称、代码、范围和基础资料。",
+      "allowed_for_ready": true
+    },
+    "official_factsheet": {
+      "description": "指数公司官方单张，优先用于行业权重、前十大、估值、收益和波动率。",
+      "allowed_for_ready": true
+    },
+    "official_methodology": {
+      "description": "指数编制方案，确认选样、加权、调样和限制规则。",
+      "allowed_for_ready": true
+    },
+    "public_price_series": {
+      "description": "公开历史点位序列，用于计算收益、走势图、最大回撤和恢复时间。",
+      "allowed_for_ready": true
+    },
+    "public_valuation_series": {
+      "description": "公开估值历史序列，用于计算区间和分位。",
+      "allowed_for_ready": true
+    }
+  },
+  "required_profile_fields": [
+    "basic_info",
+    "methodology_summary",
+    "sector_weights",
+    "top_holdings",
+    "valuation_metrics",
+    "historical_returns",
+    "drawdown_stats",
+    "dividend_metrics",
+    "risk_points",
+    "role_in_portfolio",
+    "source_items",
+    "data_date",
+    "calculation_notes"
+  ],
+  "content_rules": [
+    "成品视频里不出现“科普”。",
+    "不出现“新手”“小白”。",
+    "不出现“评分”。",
+    "不出现“推荐买入”“可以上车”“值得买”“闭眼买”“无脑买”等投资建议表达。",
+    "不出现“稳赚”“必涨”“低风险”“更安全”“吊打”“封神”等夸张表达。",
+    "不预测未来涨跌，不评价指数绝对好坏。",
+    "所有数字必须来自结构化数据文件或代码计算结果。",
+    "缺关键数据时进入 needs_review，不生成成品视频。"
+  ]
+}

@@ -85,6 +85,24 @@ runs/csi300_series_时间戳/
 - 视频画面尽量说“目前”“发布以来”“历史最大回撤阶段”，具体日期保留在追溯文件里。
 - 不使用“推荐买入”“可以上车”等投资建议表达。
 
+## 生成 Global50 生产计划
+
+第一阶段只生成 50 个指数的生产计划、资料 profile 和数据缺口报告，不生成视频：
+
+```powershell
+python build_global50_plan.py
+```
+
+输出文件：
+
+- `data/global50/global50_plan.csv`
+- `data/global50/profiles/{index_id}.json`
+- `data/global50/sources/source_registry.json`
+- `data/global50/global50_readiness_report.html`
+- `runs/global50_dry_run_时间戳/`
+
+`data_status = ready` 的指数才允许进入后续视频生成。当前计划会把只有目录级资料的指数标成 `needs_data`，把候选身份还需要人工确认的指数标成 `needs_review`。
+
 ## 部署
 
 完整部署方法见 [DEPLOYMENT.md](DEPLOYMENT.md)。

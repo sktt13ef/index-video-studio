@@ -1,0 +1,51 @@
+﻿index_id,index_name_cn,index_name_en,index_code,provider,region,market,index_type,currency,template_type,style_theme,priority,data_status,render_status,notes
+spx,标普500,S&P 500,SPX,S&P Dow Jones Indices,美国,US,broad_based,USD,overseas_broad_based,us,1,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+ndx,纳斯达克100,Nasdaq-100,NDX,Nasdaq,美国,US,technology,USD,technology_growth,us,2,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+dji,道琼斯工业平均指数,Dow Jones Industrial Average,DJI,S&P Dow Jones Indices,美国,US,broad_based,USD,overseas_broad_based,us,3,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+rut,罗素2000,Russell 2000,RUT,FTSE Russell,美国,US,broad_based,USD,overseas_broad_based,us,4,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+hsi,恒生指数,Hang Seng Index,HSI,恒生指数公司,中国香港,Hong Kong,broad_based,HKD,broad_based,hongkong,5,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+hstech,恒生科技指数,Hang Seng TECH Index,HSTECH,恒生指数公司,中国香港,Hong Kong,technology,HKD,technology_growth,hongkong,6,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+csi300,沪深300,CSI 300,CSI300,中证指数,中国内地,China A-share,broad_based,CNY,broad_based,china,7,needs_data,blocked_until_ready,已有沪深300单指数生成器，可作为该指数的数据接入样板
+csi500,中证500,CSI 500,CSI500,中证指数,中国内地,China A-share,broad_based,CNY,broad_based,china,8,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+csi1000,中证1000,CSI 1000,CSI1000,中证指数,中国内地,China A-share,broad_based,CNY,broad_based,china,9,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+csi_div,中证红利,CSI Dividend Index,CSI_DIV,中证指数,中国内地,China A-share,dividend,CNY,dividend_strategy,china,10,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+n225,日经225,Nikkei 225,N225,Nikkei,日本,Japan,broad_based,JPY,overseas_broad_based,asia,11,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+topix,东证指数,TOPIX,TOPIX,JPX Market Innovation,日本,Japan,broad_based,JPY,overseas_broad_based,asia,12,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+kospi,韩国综合指数,KOSPI Composite Index,KOSPI,KRX,韩国,Korea,broad_based,KRW,overseas_broad_based,asia,13,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+asx200,澳洲标普200,S&P/ASX 200,ASX200,S&P Dow Jones Indices,澳大利亚,Australia,broad_based,AUD,overseas_broad_based,asia,14,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+stoxx50e,欧洲斯托克50,EURO STOXX 50,STOXX50E,STOXX,欧元区,Eurozone,broad_based,EUR,overseas_broad_based,europe,15,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+dax,德国DAX,DAX,DAX,STOXX/Qontigo,德国,Germany,broad_based,EUR,overseas_broad_based,europe,16,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+ftse100,富时100,FTSE 100,FTSE100,FTSE Russell,英国,United Kingdom,broad_based,GBP,overseas_broad_based,europe,17,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+cac40,法国CAC40,CAC 40,CAC40,Euronext,法国,France,broad_based,EUR,overseas_broad_based,europe,18,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+msci_world,MSCI全球指数,MSCI World Index,MSCI_WORLD,MSCI,全球发达市场,Global developed,broad_based,multi_currency,overseas_broad_based,global,19,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+msci_em,MSCI新兴市场指数,MSCI Emerging Markets Index,MSCI_EM,MSCI,全球新兴市场,Global emerging,broad_based,multi_currency,overseas_broad_based,global,20,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+agg,彭博全球综合债券指数,Bloomberg Global Aggregate Bond Index,AGG,Bloomberg,全球,Global,bond,multi_currency,bond,bond,21,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+gsci,标普高盛商品指数,S&P GSCI,GSCI,S&P Dow Jones Indices,全球,Global,commodity,multi_currency,commodity,commodity,22,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据
+g0003,STOXX 美国高股息公司指数,G0003,G0003,STOXX,美国,US,dividend,USD,dividend_strategy,us,23,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0015,Bloomberg 中国内地高股息公司指数,G0015,G0015,Bloomberg,中国内地,China A-share,dividend,CNY,dividend_strategy,china,24,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0027,STOXX 中国香港高股息公司指数,G0027,G0027,STOXX,中国香港,Hong Kong,dividend,HKD,dividend_strategy,hongkong,25,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0039,Bloomberg 日本高股息公司指数,G0039,G0039,Bloomberg,日本,Japan,dividend,JPY,dividend_strategy,asia,26,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0051,STOXX 韩国高股息公司指数,G0051,G0051,STOXX,韩国,Korea,dividend,KRW,dividend_strategy,asia,27,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0004,Nasdaq 美国低波动公司指数,G0004,G0004,Nasdaq,美国,US,low_volatility,USD,low_volatility,us,28,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0016,MSCI 中国内地低波动公司指数,G0016,G0016,MSCI,中国内地,China A-share,low_volatility,CNY,low_volatility,china,29,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0028,Nasdaq 中国香港低波动公司指数,G0028,G0028,Nasdaq,中国香港,Hong Kong,low_volatility,HKD,low_volatility,hongkong,30,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0040,MSCI 日本低波动公司指数,G0040,G0040,MSCI,日本,Japan,low_volatility,JPY,low_volatility,asia,31,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0052,Nasdaq 韩国低波动公司指数,G0052,G0052,Nasdaq,韩国,Korea,low_volatility,KRW,low_volatility,asia,32,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0005,中证指数 美国质量因子公司指数,G0005,G0005,中证指数,美国,US,strategy,USD,strategy,us,33,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0017,FTSE Russell 中国内地质量因子公司指数,G0017,G0017,FTSE Russell,中国内地,China A-share,strategy,CNY,strategy,china,34,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0029,中证指数 中国香港质量因子公司指数,G0029,G0029,中证指数,中国香港,Hong Kong,strategy,HKD,strategy,hongkong,35,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0041,FTSE Russell 日本质量因子公司指数,G0041,G0041,FTSE Russell,日本,Japan,strategy,JPY,strategy,asia,36,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0053,中证指数 韩国质量因子公司指数,G0053,G0053,中证指数,韩国,Korea,strategy,KRW,strategy,asia,37,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0077,中证指数 澳大利亚质量因子公司指数,G0077,G0077,中证指数,澳大利亚,Australia,strategy,AUD,strategy,asia,38,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0006,恒生指数公司 美国成长风格公司指数,G0006,G0006,恒生指数公司,美国,US,technology,USD,technology_growth,us,39,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0018,S&P Dow Jones Indices 中国内地成长风格公司指数,G0018,G0018,S&P Dow Jones Indices,中国内地,China A-share,technology,CNY,technology_growth,china,40,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0030,恒生指数公司 中国香港成长风格公司指数,G0030,G0030,恒生指数公司,中国香港,Hong Kong,technology,HKD,technology_growth,hongkong,41,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0042,S&P Dow Jones Indices 日本成长风格公司指数,G0042,G0042,S&P Dow Jones Indices,日本,Japan,technology,JPY,technology_growth,asia,42,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0009,FTSE Russell 美国金融公司指数,G0009,G0009,FTSE Russell,美国,US,sector,USD,sector,us,43,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0021,中证指数 中国内地金融公司指数,G0021,G0021,中证指数,中国内地,China A-share,sector,CNY,sector,china,44,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0033,FTSE Russell 中国香港金融公司指数,G0033,G0033,FTSE Russell,中国香港,Hong Kong,sector,HKD,sector,hongkong,45,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0045,中证指数 日本金融公司指数,G0045,G0045,中证指数,日本,Japan,sector,JPY,sector,asia,46,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0057,FTSE Russell 韩国金融公司指数,G0057,G0057,FTSE Russell,韩国,Korea,sector,KRW,sector,asia,47,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0081,FTSE Russell 澳大利亚金融公司指数,G0081,G0081,FTSE Russell,澳大利亚,Australia,sector,AUD,sector,asia,48,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0105,FTSE Russell 德国金融公司指数,G0105,G0105,FTSE Russell,德国,Germany,sector,EUR,sector,europe,49,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品
+g0093,中证指数 英国金融公司指数,G0093,G0093,中证指数,英国,United Kingdom,sector,GBP,sector,europe,50,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品

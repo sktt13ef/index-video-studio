@@ -1,0 +1,125 @@
+{
+  "index_id": "g0028",
+  "data_status": "needs_review",
+  "render_status": "blocked_until_ready",
+  "missing_items": [
+    "index_identity_review",
+    "official_index_page",
+    "official_methodology",
+    "sector_weights",
+    "top_holdings",
+    "historical_price_series",
+    "historical_returns",
+    "max_drawdown",
+    "source_date",
+    "valuation_metrics"
+  ],
+  "basic_info": {
+    "index_name_cn": "Nasdaq 中国香港低波动公司指数",
+    "index_name_en": "G0028",
+    "index_code": "G0028",
+    "provider": "Nasdaq",
+    "region": "中国香港",
+    "market": "Hong Kong",
+    "currency": "HKD",
+    "index_type": "low_volatility",
+    "template_type": "low_volatility",
+    "style_theme": "hongkong",
+    "catalog_focus": "低波动公司",
+    "catalog_asset_class": "股票策略",
+    "identity_status": "needs_human_review"
+  },
+  "methodology_summary": {
+    "status": "needs_official_methodology",
+    "draft_from_catalog": "从目录描述看，该指数关注：低波动公司。",
+    "must_confirm": [
+      "样本空间",
+      "选样规则",
+      "加权方式",
+      "调样频率",
+      "成分限制"
+    ]
+  },
+  "sector_weights": {
+    "status": "missing",
+    "items": [],
+    "required_for_video": "02_holdings_breakdown"
+  },
+  "top_holdings": {
+    "status": "missing",
+    "items": [],
+    "required_for_video": "02_holdings_breakdown"
+  },
+  "valuation_metrics": {
+    "status": "missing",
+    "required_for_video": "05_valuation_view",
+    "expected_by_type": [
+      "pe",
+      "pb",
+      "dividend_yield",
+      "valuation_range",
+      "valuation_percentile"
+    ]
+  },
+  "historical_returns": {
+    "status": "missing",
+    "items": [],
+    "required_for_video": "04_return_drawdown_risk"
+  },
+  "drawdown_stats": {
+    "status": "missing",
+    "items": [],
+    "required_for_video": "04_return_drawdown_risk",
+    "calculation_required": "使用公开历史点位计算最大回撤、回撤区间和恢复情况。"
+  },
+  "dividend_metrics": {
+    "status": "required_for_dividend_only",
+    "items": [],
+    "required_for_video": "05_valuation_view"
+  },
+  "risk_points": {
+    "status": "catalog_draft_needs_review",
+    "items": [
+      "行业或风格可能集中",
+      "估值和汇率变化会影响阶段表现"
+    ]
+  },
+  "role_in_portfolio": {
+    "status": "catalog_draft_needs_review",
+    "summary": "低波风格补充",
+    "must_confirm": [
+      "核心/卫星定位",
+      "适合搭配对象",
+      "不适合承担的角色",
+      "主要回撤来源"
+    ]
+  },
+  "source_items": [
+    {
+      "source_id": "global_index_catalog_500",
+      "source_type": "catalog",
+      "path": "data/global_index_catalog_500.csv",
+      "fields_used": [
+        "code",
+        "name",
+        "region",
+        "provider",
+        "asset_class",
+        "focus",
+        "role",
+        "risks",
+        "theme"
+      ],
+      "allowed_for_final_numbers": false
+    }
+  ],
+  "data_date": {
+    "catalog_data": "not_dated",
+    "production_data": "not_collected"
+  },
+  "calculation_notes": [
+    "当前 profile 是生产计划资料，不是成片数据文件。",
+    "缺口补齐前不得生成成品视频。",
+    "未来 data_used.json 必须记录每个数字的来源、字段、区间和计算方法。"
+  ]
+}
