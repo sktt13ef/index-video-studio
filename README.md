@@ -113,6 +113,28 @@ runs/csi300_series_时间戳/
 - `data_validation_result`
 - `quality_check_result`
 
+## 差异化脚本模板
+
+第三阶段新增了 Global50 脚本模板系统：
+
+- `templates/scripts/broad_based/`
+- `templates/scripts/dividend/`
+- `templates/scripts/sector/`
+- `templates/scripts/overseas/`
+- `templates/scripts/strategy/`
+- `templates/scripts/technology/`
+- `templates/scripts/low_volatility/`
+
+每类模板固定包含 5 条 episode，覆盖认识、成分、组合角色、历史风险、估值五个主题。模板只负责表达结构，不负责事实和数字；最终脚本仍必须通过 `data_validation.py` 和 `compliance_check.py`。
+
+校验模板：
+
+```powershell
+python -m src.script_templates
+```
+
+根据 profile 渲染脚本草稿时，系统会按 `index_type` / `template_type` 选择不同模板。例如海外宽基会走 `overseas`，科技成长会走 `technology`，红利策略会走 `dividend`。
+
 ## 生成 Global50 生产计划
 
 第一阶段只生成 50 个指数的生产计划、资料 profile 和数据缺口报告，不生成视频：
