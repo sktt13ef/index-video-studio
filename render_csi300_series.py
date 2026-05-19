@@ -18,12 +18,19 @@ import pdfplumber
 import requests
 from PIL import Image, ImageDraw, ImageFont
 
+from src.compliance_check import check_text_compliance
+from src.data_used_builder import DataUsedBuilder
+from src.data_validation import assert_valid, validate_episode_payload
+from src.source_registry import normalize_source_item
+
 
 ROOT = Path(__file__).resolve().parent
 SIZE = (1080, 1920)
 VOICE = "zh-CN-YunjianNeural"
 RATE = "+12%"
 VOLUME = "+0%"
+SCRIPT_VERSION = "csi300_series_v2"
+RENDER_VERSION = "index_video_studio_v2"
 
 FACTSHEET_URL = "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/indices/detail/files/zh_CN/000300factsheet.pdf"
 METHODOLOGY_URL = "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/indices/detail/files/zh_CN/000300_Index_Methodology_cn.pdf"
@@ -674,17 +681,321 @@ def value_manifest(data: Csi300Data) -> dict[str, Any]:
     return asdict(data)
 
 
+def csi300_source_items(data: Csi300Data) -> list[dict[str, Any]]:
+    history_csv = data.history.get("csv")
+    sources_dir = Path(history_csv).parent if history_csv else ROOT / "runs"
+    return [
+        normalize_source_item(
+            source_id="csi_index_page",
+            source_type="official_index_page",
+            title="中证指数沪深300页面",
+            url=INDEX_PAGE_URL,
+            data_date=data.source_date,
+            fields=["index_name", "index_code"],
+        ),
+        normalize_source_item(
+            source_id="csi_factsheet",
+            source_type="official_factsheet",
+            title="沪深300指数单张",
+            url=FACTSHEET_URL,
+            file=str(sources_dir / "000300factsheet.pdf"),
+            data_date=data.source_date,
+            fields=["basic_info", "sector_weights", "top_holdings", "returns", "volatility", "valuation"],
+        ),
+        normalize_source_item(
+            source_id="csi_methodology",
+            source_type="official_methodology",
+            title="沪深300指数编制方案",
+            url=METHODOLOGY_URL,
+            file=str(sources_dir / "000300_Index_Methodology_cn.pdf"),
+            data_date=data.source_date,
+            fields=["methodology", "rebalance_frequency"],
+        ),
+        normalize_source_item(
+            source_id="history_price_series",
+            source_type="public_price_series",
+            title="沪深300公开日线点位",
+            file=history_csv,
+            data_date=data.history.get("latest_date", data.source_date),
+            fields=["date", "close"],
+            calculation_method="用于计算历史走势、年度收益、最新点位、最大回撤和恢复情况。",
+        ),
+        normalize_source_item(
+            source_id="valuation_pe_pb_series",
+            source_type="public_valuation_series",
+            title="沪深300 PE/PB 历史序列",
+            file=str(sources_dir / "hs300_pe_history_legulegu.csv"),
+            data_date=data.history.get("latest_date", data.source_date),
+            fields=["pe", "pb"],
+            calculation_method="用于计算 PE/PB 历史区间和分位。",
+        ),
+        normalize_source_item(
+            source_id="official_indicator_xls",
+            source_type="official_factsheet",
+            title="中证指数指标表",
+            url=data.valuation.get("sources", {}).get("dividend"),
+            file=str(sources_dir / "000300indicator.xls"),
+            data_date=data.source_date,
+            fields=["dividend_yield"],
+            calculation_method="用于计算股息率近期区间。",
+        ),
+    ]
+
+
+def scene_visual_text(spec: VideoSpec) -> list[str]:
+    text: list[str] = [spec.title, spec.subtitle]
+    for scene in spec.scenes:
+        text.extend([scene.heading, scene.summary])
+        for item in scene.items:
+            if isinstance(item, tuple):
+                text.extend(str(part) for part in item)
+            else:
+                text.append(str(item))
+    return text
+
+
+def episode_features(spec: VideoSpec) -> dict[str, bool]:
+    return {
+        "sector_weights": spec.slug == "02_holdings_breakdown",
+        "top_holdings": spec.slug == "02_holdings_breakdown",
+        "valuation_metrics": spec.slug == "05_valuation_view",
+        "max_drawdown": spec.slug == "04_return_drawdown_risk",
+        "historical_returns": spec.slug == "04_return_drawdown_risk",
+    }
+
+
+def build_episode_data_used(spec: VideoSpec, data: Csi300Data) -> dict[str, Any]:
+    source_items = csi300_source_items(data)
+    builder = DataUsedBuilder(
+        index_id="csi300",
+        episode=spec.episode,
+        episode_slug=spec.slug,
+        source_items=source_items,
+        data_date=data.source_date,
+    )
+    if spec.slug == "01_index_intro":
+        builder.add_number(
+            label="样本股数",
+            value=data.sample_count.value,
+            category="basic_metric",
+            source_field=data.sample_count.field,
+            source_id="csi_factsheet",
+            calculation_method="官方单张字段原值。",
+            display_context="官方基础信息",
+        )
+        builder.add_number(
+            label="基值",
+            value=data.base_value.value,
+            category="basic_metric",
+            source_field=data.base_value.field,
+            source_id="csi_factsheet",
+            calculation_method="官方单张字段原值。",
+            display_context="基点设置",
+        )
+    elif spec.slug == "02_holdings_breakdown":
+        for item in data.industry_top[:5]:
+            builder.add_number(
+                label=item.field,
+                value=item.value,
+                category="sector_weight",
+                source_field=item.field,
+                source_id="csi_factsheet",
+                calculation_method="官方单张行业权重原值；本集展示 TOP5，合计不要求等于 100%。",
+                display_context="行业权重TOP5",
+            )
+        for row in data.top_holdings[:10]:
+            builder.add_number(
+                label=row["名称"].value,
+                value=row["权重"].value,
+                category="holding_weight",
+                source_field=row["权重"].field,
+                source_id="csi_factsheet",
+                calculation_method="官方单张前十大权重原值。",
+                display_context="前十大权重股",
+            )
+    elif spec.slug == "04_return_drawdown_risk":
+        sample_range = f"{data.history.get('start_date')} 至 {data.history.get('latest_date')}"
+        for year, value in list(data.history.get("annual_returns", {}).items())[-6:]:
+            builder.add_number(
+                label=f"{year}年度收益",
+                value=value,
+                category="historical_return",
+                source_field="公开日线点位/年度收盘价收益",
+                source_id="history_price_series",
+                calculation_method="按年度最后一个交易日收盘点位计算年度收益。",
+                display_context="近几年年度收益",
+                sample_range=sample_range,
+                calculation_range=f"{year} 年度",
+            )
+        builder.add_number(
+            label="最大回撤",
+            value=data.history["max_drawdown"],
+            category="max_drawdown",
+            source_field="公开日线点位/最大回撤",
+            source_id="history_price_series",
+            calculation_method="用发布以来的收盘点位序列计算累计净值回撤。",
+            display_context="回撤和波动",
+            sample_range=sample_range,
+            calculation_range=f"{data.history.get('start_date')} 至 {data.history.get('latest_date')}",
+        )
+        builder.add_number(
+            label="最新点位",
+            value=data.history["latest_close"],
+            category="historical_level",
+            source_field="公开日线点位/最新收盘点位",
+            source_id="history_price_series",
+            calculation_method="公开日线点位最新收盘值。",
+            display_context="多年历史走势",
+            sample_range=sample_range,
+        )
+        builder.add_number(
+            label="1年波动率",
+            value=data.volatility["1年年化"].value,
+            category="volatility",
+            source_field=data.volatility["1年年化"].field,
+            source_id="csi_factsheet",
+            calculation_method="官方单张字段原值。",
+            display_context="回撤和波动",
+            sample_range="官方单张口径",
+        )
+    elif spec.slug == "05_valuation_view":
+        builder.add_number(
+            label="PE当前值",
+            value=data.valuation["pe"]["current"],
+            category="pe",
+            source_field="PE/current",
+            source_id="valuation_pe_pb_series",
+            calculation_method="公开 PE 历史序列最新值。",
+            display_context="当前值要配区间",
+        )
+        builder.add_number(
+            label="PE历史区间",
+            value=data.valuation["pe"]["history_range"],
+            category="valuation_range",
+            source_field="PE/history_range",
+            source_id="valuation_pe_pb_series",
+            calculation_method="公开 PE 历史序列最小值到最大值。",
+            display_context="当前值要配区间",
+        )
+        builder.add_number(
+            label="PE分位",
+            value=data.valuation["pe"]["percentile"],
+            category="valuation_percentile",
+            source_field="PE/percentile",
+            source_id="valuation_pe_pb_series",
+            calculation_method="公开 PE 历史序列中小于等于当前值的样本占比。",
+            display_context="当前值要配区间",
+        )
+        builder.add_number(
+            label="PB当前值",
+            value=data.valuation["pb"]["current"],
+            category="pb",
+            source_field="PB/current",
+            source_id="valuation_pe_pb_series",
+            calculation_method="公开 PB 历史序列最新值。",
+            display_context="当前值要配区间",
+        )
+        builder.add_number(
+            label="PB历史区间",
+            value=data.valuation["pb"]["history_range"],
+            category="valuation_range",
+            source_field="PB/history_range",
+            source_id="valuation_pe_pb_series",
+            calculation_method="公开 PB 历史序列最小值到最大值。",
+            display_context="当前值要配区间",
+        )
+        builder.add_number(
+            label="PB分位",
+            value=data.valuation["pb"]["percentile"],
+            category="valuation_percentile",
+            source_field="PB/percentile",
+            source_id="valuation_pe_pb_series",
+            calculation_method="公开 PB 历史序列中小于等于当前值的样本占比。",
+            display_context="当前值要配区间",
+        )
+        builder.add_number(
+            label="股息率当前值",
+            value=data.valuation["dividend_yield"]["current"],
+            category="dividend_yield",
+            source_field="dividend_yield/current",
+            source_id="official_indicator_xls",
+            calculation_method="官方指标表股息率字段最新值。",
+            display_context="当前值要配区间",
+        )
+        builder.add_number(
+            label="股息率近期区间",
+            value=data.valuation["dividend_yield"]["recent_range"],
+            category="valuation_range",
+            source_field="dividend_yield/recent_range",
+            source_id="official_indicator_xls",
+            calculation_method="官方指标表股息率字段样本的最小值到最大值。",
+            display_context="当前值要配区间",
+        )
+    return builder.build()
+
+
+def episode_metadata(spec: VideoSpec, data: Csi300Data, source_items: list[dict[str, Any]]) -> dict[str, Any]:
+    return {
+        "index_id": "csi300",
+        "index_name": "沪深300",
+        "index_code": data.index_code.value,
+        "region": "中国内地",
+        "index_type": "broad_based",
+        "template_type": "broad_based",
+        "style_theme": "china",
+        "data_date": data.source_date,
+        "source_items": source_items,
+        "script_version": SCRIPT_VERSION,
+        "render_version": RENDER_VERSION,
+        "episode": spec.episode,
+        "episode_slug": spec.slug,
+    }
+
+
+def quality_check_result(final: Path, total_duration: float) -> dict[str, Any]:
+    return {
+        "passed": final.exists() and final.stat().st_size > 0 and 45 <= total_duration <= 100,
+        "duration_seconds": round(total_duration, 3),
+        "resolution": f"{SIZE[0]}x{SIZE[1]}",
+        "audio_expected": True,
+        "subtitle_mode": "per_scene_ass",
+    }
+
+
 def render_video(spec: VideoSpec, data: Csi300Data, output_root: Path) -> Path:
     run_dir = output_root / safe_name(f"{spec.episode:02d}_{spec.slug}")
     run_dir.mkdir(parents=True, exist_ok=True)
+    data_used = build_episode_data_used(spec, data)
+    full_script_parts = [scene.narration.strip() for scene in spec.scenes]
+    full_script = "".join(full_script_parts)
+    metadata = episode_metadata(spec, data, data_used["source_items"])
+    payload = {
+        "metadata": metadata,
+        "data_used": data_used,
+        "features": episode_features(spec),
+        "visual_text": scene_visual_text(spec),
+    }
+    data_validation_result = validate_episode_payload(payload)
+    compliance_check_result = check_text_compliance(script=full_script, visual_text=payload["visual_text"])
+    (run_dir / "data_used.json").write_text(json.dumps(data_used, ensure_ascii=False, indent=2), encoding="utf-8")
+    if not data_validation_result.passed or not compliance_check_result.passed:
+        failed_manifest = {
+            **metadata,
+            "title": spec.title,
+            "render_status": "blocked_needs_review",
+            "data_validation_result": data_validation_result.to_dict(),
+            "compliance_check_result": compliance_check_result.to_dict(),
+        }
+        (run_dir / "manifest.json").write_text(json.dumps(failed_manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    assert_valid(data_validation_result)
+    if not compliance_check_result.passed:
+        raise ValueError("合规检查未通过：" + "; ".join(compliance_check_result.errors))
     segments = []
     total_duration = 0.0
-    full_script_parts = []
     for idx, scene in enumerate(spec.scenes):
         slide = run_dir / f"scene_{idx + 1:02d}.png"
         make_slide(slide, spec, idx, data)
         narration = scene.narration.strip()
-        full_script_parts.append(narration)
         voice = run_dir / f"voice_{idx + 1:02d}.mp3"
         cues = asyncio.run(make_voice_and_cues(narration, voice))
         voice_duration = duration(voice)
@@ -765,11 +1076,13 @@ def render_video(spec: VideoSpec, data: Csi300Data, output_root: Path) -> Path:
                     combined_cues.append({"segment": idx + 1, "text": parts[9]})
         offset += seg_duration
     (run_dir / "subtitles_manifest.json").write_text(json.dumps(combined_cues, ensure_ascii=False, indent=2), encoding="utf-8")
+    quality_result = quality_check_result(final, total_duration)
     manifest = {
+        **metadata,
         "slug": spec.slug,
         "episode": spec.episode,
         "title": spec.title,
-        "script": "".join(full_script_parts),
+        "script": full_script,
         "duration": total_duration,
         "voice": VOICE,
         "rate": RATE,
@@ -782,6 +1095,12 @@ def render_video(spec: VideoSpec, data: Csi300Data, output_root: Path) -> Path:
         },
         "data_source_date": data.source_date,
         "data": value_manifest(data),
+        "source_items": data_used["source_items"],
+        "script_version": SCRIPT_VERSION,
+        "render_version": RENDER_VERSION,
+        "compliance_check_result": compliance_check_result.to_dict(),
+        "data_validation_result": data_validation_result.to_dict(),
+        "quality_check_result": quality_result,
         "max_drawdown_status": f"已展示：根据公开日线点位自行计算，最大回撤 {data.history.get('max_drawdown')}。" if spec.slug == "04_return_drawdown_risk" else None,
         "final": str(final),
     }

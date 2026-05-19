@@ -85,6 +85,34 @@ runs/csi300_series_时间戳/
 - 视频画面尽量说“目前”“发布以来”“历史最大回撤阶段”，具体日期保留在追溯文件里。
 - 不使用“推荐买入”“可以上车”等投资建议表达。
 
+## 数据校验和追溯
+
+第二阶段新增了生产前校验模块：
+
+- `src/source_registry.py`：统一数据源结构和来源校验。
+- `src/data_used_builder.py`：生成每集 `data_used.json`，记录视频里展示的数字。
+- `src/data_validation.py`：检查指数基础信息、来源、日期、权重、估值、回撤、历史收益等关键数据。
+- `src/compliance_check.py`：检查成品脚本和画面文字是否命中禁用表达。
+
+沪深300正式生成器已经接入这些检查。每条 episode 渲染前会先生成 `data_used.json` 并执行数据校验和合规检查；检查失败会阻止生成，并把状态写入 `manifest.json`。
+
+每条视频的 `manifest.json` 会记录：
+
+- `index_id`
+- `index_name`
+- `index_code`
+- `region`
+- `index_type`
+- `template_type`
+- `style_theme`
+- `data_date`
+- `source_items`
+- `script_version`
+- `render_version`
+- `compliance_check_result`
+- `data_validation_result`
+- `quality_check_result`
+
 ## 生成 Global50 生产计划
 
 第一阶段只生成 50 个指数的生产计划、资料 profile 和数据缺口报告，不生成视频：
