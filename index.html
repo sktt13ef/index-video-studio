@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>指数观察五条视频策划台</title>
+    <link rel="stylesheet" href="./assets/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace">
+        <aside class="input-panel" aria-label="指数资料输入">
+          <div class="brand-row">
+            <div>
+              <p class="eyebrow">ETF Video Planner</p>
+              <h1>指数观察五条视频策划台</h1>
+            </div>
+            <button id="resetBtn" class="icon-button" type="button" title="清空表单" aria-label="清空表单">
+              ↺
+            </button>
+          </div>
+
+          <form id="plannerForm" class="form-grid">
+            <label>
+              指数简称
+              <input id="shortName" name="shortName" value="中证红利" autocomplete="off" />
+            </label>
+            <label>
+              指数全名
+              <input id="fullName" name="fullName" value="中证红利指数" autocomplete="off" />
+            </label>
+            <label>
+              选股范围
+              <textarea id="universe" name="universe" rows="2">从沪深市场中选取现金股息率高、分红稳定、具有一定规模和流动性的上市公司证券作为样本。</textarea>
+            </label>
+            <label>
+              编制/筛选规则
+              <textarea id="rules" name="rules" rows="2">重点看股息率、分红连续性、市值和流动性，并按规则定期调整样本。</textarea>
+            </label>
+            <label>
+              行业分布
+              <textarea id="industries" name="industries" rows="2">银行、煤炭、交通运输、公用事业、钢铁等偏价值和高股息行业占比较高。</textarea>
+            </label>
+            <label>
+              前十大权重
+              <textarea id="holdings" name="holdings" rows="2">请填入最新前十大权重股，或者上传截图后在生成结果里保留“以图片为准”。</textarea>
+            </label>
+            <label>
+              组合角色
+              <textarea id="role" name="role" rows="2">更像偏防守、偏现金流、偏价值风格的卫星配置，不适合作为唯一核心仓位。</textarea>
+            </label>
+            <label>
+              适合搭配
+              <textarea id="pairings" name="pairings" rows="2">可与宽基指数、成长风格指数、海外指数搭配，降低单一风格暴露。</textarea>
+            </label>
+            <label>
+              最大风险
+              <textarea id="risks" name="risks" rows="3">高股息不等于低波动；行业可能集中；红利风格也会阶段性跑输成长；成分股分红能力变化会影响指数表现。</textarea>
+            </label>
+            <label>
+              历史回撤/典型下跌阶段
+              <textarea id="drawdown" name="drawdown" rows="2">请填入最新历史最大回撤或典型下跌区间；没有核验数据时，视频里只讲风险框架。</textarea>
+            </label>
+            <label>
+              估值指标
+              <textarea id="valuation" name="valuation" rows="2">适合关注 PE、PB、股息率、估值分位，以及这些指标所处的历史区间。</textarea>
+            </label>
+            <div class="inline-fields">
+              <label>
+                数据日期
+                <input id="dataDate" name="dataDate" value="请填入数据日期" autocomplete="off" />
+              </label>
+              <label>
+                数据来源
+                <input id="dataSource" name="dataSource" value="中证指数官网/基金公司公告/公开数据源" autocomplete="off" />
+              </label>
+            </div>
+          </form>
+
+          <div class="upload-zone">
+            <div>
+              <h2>上传图表/截图</h2>
+              <p>文件名包含“行业、权重、回撤、估值”等关键词时，会自动匹配到对应视频。</p>
+            </div>
+            <input id="assetInput" type="file" accept="image/*" multiple />
+            <div id="assetList" class="asset-list" aria-live="polite"></div>
+          </div>
+
+          <div class="actions">
+            <button id="generateBtn" class="primary-button" type="button">生成 5 条视频策划</button>
+            <button id="testVideoBtn" class="primary-button alternate" type="button">生成第 1 条测试视频</button>
+            <button id="exportMarkdownBtn" class="secondary-button" type="button">导出 Markdown</button>
+            <button id="exportJsonBtn" class="secondary-button" type="button">导出 JSON</button>
+          </div>
+        </aside>
+
+        <section class="output-panel" aria-label="五条视频策划结果">
+          <div class="toolbar">
+            <div>
+              <p class="eyebrow">Series Output</p>
+              <h2 id="seriesTitle">一周看懂中证红利</h2>
+            </div>
+            <div class="status-pill" id="statusPill">已载入示例</div>
+          </div>
+
+          <div id="renderResult" class="render-result" hidden>
+            <div>
+              <p class="eyebrow">Test Video</p>
+              <h3>测试视频已生成</h3>
+              <p id="renderPath"></p>
+            </div>
+            <video id="videoPreview" controls playsinline></video>
+          </div>
+
+          <div class="schedule-strip" id="scheduleStrip"></div>
+          <div id="videoCards" class="video-grid"></div>
+        </section>
+      </section>
+    </main>
+
+    <template id="assetTemplate">
+      <article class="asset-item">
+        <img alt="" />
+        <div>
+          <strong></strong>
+          <label>
+            配图用途
+            <select>
+              <option value="auto">自动匹配</option>
+              <option value="index_intro">第 1 条：跟踪什么</option>
+              <option value="holdings_breakdown">第 2 条：行业和权重</option>
+              <option value="portfolio_role">第 3 条：组合角色</option>
+              <option value="risk_drawdown">第 4 条：风险和回撤</option>
+              <option value="valuation_view">第 5 条：估值怎么看</option>
+              <option value="cover">封面</option>
+            </select>
+          </label>
+        </div>
+      </article>
+    </template>
+
+    <template id="videoTemplate">
+      <article class="video-card">
+        <header>
+          <div class="number-badge"></div>
+          <div>
+            <p class="template-id"></p>
+            <h3></h3>
+          </div>
+        </header>
+        <p class="goal"></p>
+        <div class="card-section">
+          <h4>口播脚本</h4>
+          <textarea class="script-text" rows="8"></textarea>
+        </div>
+        <div class="card-section">
+          <h4>画面安排</h4>
+          <ul class="visual-list"></ul>
+        </div>
+        <div class="card-section">
+          <h4>匹配图片</h4>
+          <div class="matched-assets"></div>
+        </div>
+      </article>
+    </template>
+
+    <script src="./assets/app.js"></script>
+  </body>
+</html>

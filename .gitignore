@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Generated videos and working files
+runs/
+output/
+*.mp4
+*.mp3
+*.wav
+*.ass
+*.log
+
+# Temporary downloaded data
+tmp_*.xls
+tmp_*.xlsx
+*.tmp
+
+# Local editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

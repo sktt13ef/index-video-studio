@@ -1,0 +1,10 @@
+akshare
+edge-tts
+fastapi
+pandas
+pdfplumber
+pillow
+pydantic
+requests
+uvicorn[standard]
+xlrd
