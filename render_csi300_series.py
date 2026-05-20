@@ -119,7 +119,7 @@ def font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
 F_TITLE = font(58, True)
 F_H2 = font(43, True)
 F_BODY = font(33)
-F_SUBTITLE = font(38, True)
+F_SUBTITLE = font(48)
 F_SMALL = font(27)
 F_BADGE = font(28, True)
 F_NUM = font(46, True)
@@ -633,7 +633,7 @@ PlayResY: 1920
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Default,Microsoft YaHei,38,&H00FFFFFF,&H000000FF,&H6A12201B,&HAA12201B,1,0,0,0,100,100,0,0,1,3,0,2,76,76,260,1
+Style: Default,Noto Sans SC,50,&H00201811,&H000000FF,&H00F7F8FC,&H00000000,0,0,0,0,100,100,0,0,1,1,0,2,72,72,410,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -643,7 +643,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     for cue in normalized:
         start = max(0.0, float(cue["start"]))
         end = min(total_duration, max(start + 0.35, float(cue["end"])))
-        wrapped = wrap_by_width(draw, str(cue["text"]), F_SUBTITLE, 760)
+        wrapped = wrap_by_width(draw, str(cue["text"]), F_SUBTITLE, 900)
         cleaned: list[str] = []
         for line in wrapped:
             if cleaned and re.fullmatch(r"[\d.%％。，、！？；：,.!?;:\-]+", line) and len(line) <= 6:
@@ -1025,7 +1025,7 @@ def render_video(spec: VideoSpec, data: Csi300Data, output_root: Path) -> Path:
                 "-t",
                 f"{voice_duration + 0.35:.3f}",
                 "-vf",
-                f"ass={ass.name},format=yuv420p",
+                f"drawbox=x=0:y=1376:w=1080:h=154:color=0xF7F8FC@0.94:t=fill,drawbox=x=0:y=1376:w=1080:h=154:color=0xD8E2EC@0.72:t=2,ass={ass.name},format=yuv420p",
                 "-map",
                 "0:v:0",
                 "-map",

@@ -371,7 +371,7 @@ def draw_scene(path: Path, profile: dict[str, Any], episode: Episode, scene: Sce
         max_value = max(pct_float(item["weight"]) for item in scene.items[:5])
         donut_values = [pct_float(item["weight"]) for item in scene.items[:5]]
         donut_labels = [str(item["name"]) for item in scene.items[:5]]
-        draw_donut(draw, (250, y + 200), 122, donut_values, donut_labels, theme)
+        draw_donut(draw, (250, y + 178), 112, donut_values, donut_labels, theme)
         bx = 470
         for item in scene.items[:5]:
             value = pct_float(item["weight"])
@@ -380,16 +380,16 @@ def draw_scene(path: Path, profile: dict[str, Any], episode: Episode, scene: Sce
             bar_w = int(390 * value / max_value)
             draw.rounded_rectangle((bx, y + 52, bx + 390, y + 78), radius=13, fill=theme["soft"])
             draw.rounded_rectangle((bx, y + 52, bx + bar_w, y + 78), radius=13, fill=theme["blue"])
-            y += 84
+            y += 74
     elif scene.kind == "table":
-        draw.rounded_rectangle((74, y, 1006, y + 430), radius=18, fill="#ffffff", outline=theme["line"], width=2)
+        draw.rounded_rectangle((74, y, 1006, y + 400), radius=18, fill="#ffffff", outline=theme["line"], width=2)
         draw.text((110, y + 30), "名称", fill=theme["blue"], font=F_SMALL)
         draw.text((620, y + 30), "权重", fill=theme["blue"], font=F_SMALL)
-        row_y = y + 76
+        row_y = y + 72
         for item in scene.items[:6]:
             draw.text((110, row_y), str(item["name"])[:12], fill=theme["ink"], font=F_SMALL)
             draw.text((620, row_y), str(item["weight"]), fill=theme["ink"], font=F_SMALL)
-            row_y += 54
+            row_y += 50
     elif scene.kind == "metrics":
         labels = [str(item[0]) for item in scene.items[:4]]
         values = [str(item[1]) for item in scene.items[:4]]
@@ -418,11 +418,11 @@ def draw_scene(path: Path, profile: dict[str, Any], episode: Episode, scene: Sce
             draw_wrapped(draw, value, (x - 40, y + 208), 230, F_SMALL, theme["muted"], 8, 3)
     elif scene.kind == "history":
         returns = [(str(item["period"]), pct_float(item["return"])) for item in scene.items]
-        chart = (96, y + 10, 984, y + 450)
-        zero = y + 260
+        chart = (96, y + 10, 984, y + 400)
+        zero = y + 232
         draw.rounded_rectangle(chart, radius=20, fill="#ffffff", outline=theme["line"], width=2)
         for k in range(5):
-            yy = y + 70 + k * 74
+            yy = y + 64 + k * 64
             draw.line((132, yy, 944, yy), fill=theme["soft"], width=2)
         draw.line((132, zero, 944, zero), fill=theme["line"], width=3)
         step = 820 // max(1, len(returns) - 1)
@@ -430,7 +430,7 @@ def draw_scene(path: Path, profile: dict[str, Any], episode: Episode, scene: Sce
         for i, (year, value) in enumerate(returns):
             x = 142 + i * step
             yy = zero - int(value * 4.4)
-            yy = max(y + 62, min(y + 414, yy))
+            yy = max(y + 58, min(y + 366, yy))
             points.append((x, yy))
             draw.line((x, zero, x, yy), fill=theme["soft"], width=14)
             draw.ellipse((x - 8, yy - 8, x + 8, yy + 8), fill=theme["accent"])
@@ -473,15 +473,19 @@ def raise_subtitle_safe_area(path: Path) -> None:
     content = path.read_text(encoding="utf-8-sig")
     content = content.replace(
         "Style: Default,Microsoft YaHei,38,&H00FFFFFF,&H000000FF,&H6A12201B,&HAA12201B,1,0,0,0,100,100,0,0,1,3,0,2,76,76,260,1",
-        "Style: Default,Noto Sans SC,40,&H00201811,&H000000FF,&H00F7F8FC,&H00F7F8FC,1,0,0,0,100,100,0,0,3,10,0,2,120,120,350,1",
+        "Style: Default,Noto Sans SC,50,&H00201811,&H000000FF,&H00F7F8FC,&H00000000,0,0,0,0,100,100,0,0,1,1,0,2,72,72,410,1",
     )
     content = content.replace(
         "Style: Default,Microsoft YaHei,36,&H00FFFFFF,&H000000FF,&H6A12201B,&HAA12201B,1,0,0,0,100,100,0,0,1,3,0,2,76,76,405,1",
-        "Style: Default,Noto Sans SC,40,&H00201811,&H000000FF,&H00F7F8FC,&H00F7F8FC,1,0,0,0,100,100,0,0,3,10,0,2,120,120,350,1",
+        "Style: Default,Noto Sans SC,50,&H00201811,&H000000FF,&H00F7F8FC,&H00000000,0,0,0,0,100,100,0,0,1,1,0,2,72,72,410,1",
     )
     content = content.replace(
         "Style: Default,Noto Sans SC,34,&H00857066,&H000000FF,&H00FCF8F7,&H00FCF8F7,1,0,0,0,100,100,0,0,1,2,0,2,110,110,420,1",
+        "Style: Default,Noto Sans SC,50,&H00201811,&H000000FF,&H00F7F8FC,&H00000000,0,0,0,0,100,100,0,0,1,1,0,2,72,72,410,1",
+    )
+    content = content.replace(
         "Style: Default,Noto Sans SC,40,&H00201811,&H000000FF,&H00F7F8FC,&H00F7F8FC,1,0,0,0,100,100,0,0,3,10,0,2,120,120,350,1",
+        "Style: Default,Noto Sans SC,50,&H00201811,&H000000FF,&H00F7F8FC,&H00000000,0,0,0,0,100,100,0,0,1,1,0,2,72,72,410,1",
     )
     path.write_text(content, encoding="utf-8-sig")
 
@@ -524,6 +528,8 @@ def render_episode(profile: dict[str, Any], episode: Episode, index_dir: Path, s
             "crop=1080:1920:25+sin(t*0.45)*8:45+cos(t*0.37)*6,"
             "fade=t=in:st=0:d=0.22,"
             f"fade=t=out:st={out_fade_start:.3f}:d=0.25,"
+            "drawbox=x=0:y=1376:w=1080:h=154:color=0xF7F8FC@0.94:t=fill,"
+            "drawbox=x=0:y=1376:w=1080:h=154:color=0xD8E2EC@0.72:t=2,"
             f"ass={ass.name},format=yuv420p"
         )
         speech.run(
