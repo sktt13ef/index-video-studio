@@ -66,6 +66,11 @@ UNSUPPORTED_FACT_WORDS = [
     "银行股占",
     "前八大",
     "超过四成",
+    "未超过",
+    "三分之一",
+    "两成",
+    "三足鼎立",
+    "相对可控",
 ]
 
 
@@ -141,7 +146,7 @@ class AIScriptWriter:
                 )
             feedback = (
                 "上次输出不合格，请在上一版基础上扩写，不要改变事实。"
-                "每个场景补到两到三句话，总字数至少 260 个中文字符，"
+                "每个场景补到两句话即可，总字数必须控制在 240 到 340 个中文字符，"
                 "可以解释这些事实为什么影响指数边界、权重或风险，但不能跨集数。问题："
                 + "；".join(checks["issues"])
                 + "\n上一版输出："
@@ -177,7 +182,7 @@ def build_prompt(profile: dict[str, Any], episode: Any) -> str:
 5. 不预测未来涨跌，不评价绝对好坏，不给投资动作。
 6. 每个场景口播必须紧贴该场景画面；只能使用 topic_data 和 visual_scenes 里的信息，不能跨到其他集数的话题。
 7. 语言要像认真讲给普通投资者听，短句、具体、少形容词，不要研报腔。
-8. 整条视频的四个场景合计至少 260 个中文字符；每个场景尽量写成两句话，太短会被系统拒绝。
+8. 整条视频的四个场景合计 240 到 340 个中文字符；每个场景尽量写成两句话，太短或太长都会被系统拒绝。
 9. 每个场景至少讲两个具体事实，并解释这些事实为什么重要，例如样本范围、筛选逻辑、调样频率、行业权重、前十大、回撤、PE区间、股息率或组合角色。
 10. 不要自行计算“前八大合计、两年累计、超过几成”等派生数字；只有 topic_data 明确给出的数字才能写。
 11. 只输出 JSON。
@@ -342,10 +347,12 @@ def validate_narrations(narrations: list[str], allowed_text: str = "") -> dict[s
             issues.append(f"出现未在数据包中的数字：{number}")
     for i, text in enumerate(narrations, 1):
         length = len(text)
-        if length < 42 or length > 145:
+        if length < 42 or length > 110:
             issues.append(f"场景{i}长度不合适：{length}字")
-    if sum(len(item) for item in narrations) < 260:
-        issues.append("四个场景合计少于260字。")
+    if sum(len(item) for item in narrations) < 240:
+        issues.append("四个场景合计少于240字。")
+    if sum(len(item) for item in narrations) > 340:
+        issues.append("四个场景合计超过340字。")
     return {
         "passed": not issues,
         "issues": issues,

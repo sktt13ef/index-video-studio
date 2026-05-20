@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import argparse
 import json
+import math
 import shutil
 import subprocess
 from dataclasses import dataclass
@@ -24,7 +25,7 @@ SIZE = (1080, 1920)
 VOICE = "zh-CN-YunjianNeural"
 RATE = "+3%"
 DISCLAIMER = "仅作指数观察，不构成投资建议；本视频由 AI 辅助生成。"
-CTA = "感谢观看，可以点点关注，继续了解更多指数观察。"
+CTA = "这里是指数观察局，每天认识一个指数。感谢观看，欢迎关注。"
 DATA_NOTE = "数据来源：中证指数官方单张、公开历史点位和估值序列；发布前以最新公开资料为准。"
 
 
@@ -70,26 +71,34 @@ class Episode:
     scenes: list[Scene]
 
 
-def font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
+def font(size: int, bold: bool = False, weight: str | None = None) -> ImageFont.FreeTypeFont:
     candidates = [
+        Path("C:/Windows/Fonts/NotoSansSC-VF.ttf"),
         Path("C:/Windows/Fonts/msyhbd.ttc") if bold else Path("C:/Windows/Fonts/msyh.ttc"),
         Path("C:/Windows/Fonts/simhei.ttf"),
         Path("C:/Windows/Fonts/simsun.ttc"),
     ]
     for path in candidates:
         if path.exists():
-            return ImageFont.truetype(str(path), size)
+            loaded = ImageFont.truetype(str(path), size)
+            if path.name == "NotoSansSC-VF.ttf":
+                try:
+                    loaded.set_variation_by_name(weight or ("Bold" if bold else "Regular"))
+                except Exception:
+                    pass
+            return loaded
     return ImageFont.load_default()
 
 
-F_TITLE = font(60, True)
-F_H1 = font(48, True)
-F_H2 = font(40, True)
-F_BODY = font(32)
-F_SMALL = font(25)
-F_FOOTER = font(23)
-F_BADGE = font(28, True)
-F_NUM = font(44, True)
+F_TITLE = font(60, True, "Black")
+F_H1 = font(48, True, "Bold")
+F_H2 = font(40, True, "Bold")
+F_BODY = font(32, False, "Regular")
+F_SMALL = font(25, False, "Regular")
+F_FOOTER = font(23, False, "Regular")
+F_BADGE = font(28, True, "Bold")
+F_NUM = font(44, True, "Black")
+F_MICRO = font(20, False, "Regular")
 
 
 def load_profile(index_id: str) -> dict[str, Any]:
@@ -276,9 +285,22 @@ def draw_wrapped(draw: ImageDraw.ImageDraw, text: str, xy: tuple[int, int], widt
     return y
 
 
+def draw_background_texture(draw: ImageDraw.ImageDraw, theme: dict[str, str]) -> None:
+    for i in range(42):
+        x = 52 + (i * 137) % 980
+        y = 188 + (i * 211) % 1280
+        r = 1 + (i % 3)
+        fill = theme["line"] if i % 2 else "#ffffff"
+        draw.ellipse((x - r, y - r, x + r, y + r), fill=fill)
+    for i in range(6):
+        y = 210 + i * 212
+        draw.line((74, y, 1006, y + 34), fill=theme["line"], width=1)
+
+
 def base_slide(theme: dict[str, str], episode: Episode) -> tuple[Image.Image, ImageDraw.ImageDraw]:
     img = Image.new("RGB", SIZE, theme["bg"])
     draw = ImageDraw.Draw(img)
+    draw_background_texture(draw, theme)
     draw.rectangle((0, 0, 1080, 14), fill=theme["accent"])
     draw.rounded_rectangle((74, 52, 1006, 150), radius=18, fill="#ffffff", outline=theme["line"], width=3)
     draw.rectangle((104, 88, 182, 98), fill=theme["accent"])
@@ -290,9 +312,41 @@ def base_slide(theme: dict[str, str], episode: Episode) -> tuple[Image.Image, Im
     draw.line((74, 650, 1006, 650), fill=theme["line"], width=3)
     draw.line((74, 1562, 1006, 1562), fill=theme["line"], width=2)
     draw_wrapped(draw, DISCLAIMER, (74, 1588), 920, F_FOOTER, theme["muted"], 8, 2)
-    draw_wrapped(draw, CTA, (74, 1644), 920, F_FOOTER, theme["blue"], 8, 1)
+    draw_wrapped(draw, CTA, (74, 1644), 920, F_FOOTER, theme["blue"], 8, 2)
     draw_wrapped(draw, DATA_NOTE, (74, 1690), 920, F_FOOTER, theme["muted"], 8, 2)
     return img, draw
+
+
+def draw_donut(draw: ImageDraw.ImageDraw, center: tuple[int, int], radius: int, values: list[float], labels: list[str], theme: dict[str, str]) -> None:
+    colors = [theme["blue"], theme["accent"], "#7d8fa8", "#b7c3d4", "#d8e2ec"]
+    total = max(sum(values), 1)
+    start = -90
+    box = (center[0] - radius, center[1] - radius, center[0] + radius, center[1] + radius)
+    for i, value in enumerate(values):
+        extent = 360 * value / total
+        draw.pieslice(box, start, start + extent, fill=colors[i % len(colors)])
+        start += extent
+    inner = radius - 46
+    draw.ellipse((center[0] - inner, center[1] - inner, center[0] + inner, center[1] + inner), fill="#ffffff")
+    draw.text((center[0] - 52, center[1] - 28), "行业", fill=theme["muted"], font=F_SMALL)
+    draw.text((center[0] - 56, center[1] + 6), "TOP5", fill=theme["blue"], font=F_BADGE)
+    legend_y = center[1] + radius + 28
+    for i, label in enumerate(labels[:3]):
+        x = center[0] - 160 + i * 108
+        draw.rectangle((x, legend_y, x + 22, legend_y + 10), fill=colors[i])
+        draw.text((x, legend_y + 18), label[:4], fill=theme["muted"], font=F_MICRO)
+
+
+def draw_valuation_gauge(draw: ImageDraw.ImageDraw, x: int, y: int, width: int, percentile: str, theme: dict[str, str]) -> None:
+    value = max(0, min(100, pct_float(percentile) if percentile else 0))
+    draw.rounded_rectangle((x, y, x + width, y + 28), radius=14, fill=theme["soft"], outline=theme["line"], width=1)
+    fill_w = int(width * value / 100)
+    draw.rounded_rectangle((x, y, x + fill_w, y + 28), radius=14, fill=theme["accent"])
+    marker_x = x + fill_w
+    draw.line((marker_x, y - 12, marker_x, y + 40), fill=theme["blue"], width=3)
+    draw.text((x, y + 48), "低位", fill=theme["muted"], font=F_MICRO)
+    draw.text((x + width - 42, y + 48), "高位", fill=theme["muted"], font=F_MICRO)
+    draw.text((marker_x - 30, y - 48), percentile, fill=theme["blue"], font=F_SMALL)
 
 
 def draw_scene(path: Path, profile: dict[str, Any], episode: Episode, scene: Scene, scene_index: int) -> None:
@@ -315,14 +369,18 @@ def draw_scene(path: Path, profile: dict[str, Any], episode: Episode, scene: Sce
             y += 136
     elif scene.kind == "bars":
         max_value = max(pct_float(item["weight"]) for item in scene.items[:5])
+        donut_values = [pct_float(item["weight"]) for item in scene.items[:5]]
+        donut_labels = [str(item["name"]) for item in scene.items[:5]]
+        draw_donut(draw, (260, y + 250), 150, donut_values, donut_labels, theme)
+        bx = 470
         for item in scene.items[:5]:
             value = pct_float(item["weight"])
-            draw.text((100, y), item["name"], fill=theme["ink"], font=F_BODY)
-            draw.text((860, y), item["weight"], fill=theme["blue"], font=F_BODY)
-            bar_w = int(650 * value / max_value)
-            draw.rounded_rectangle((100, y + 50, 100 + bar_w, y + 82), radius=16, fill=theme["blue"])
-            draw.rounded_rectangle((100 + bar_w, y + 50, 760, y + 82), radius=16, fill=theme["soft"])
-            y += 116
+            draw.text((bx, y), item["name"], fill=theme["ink"], font=F_BODY)
+            draw.text((888, y), item["weight"], fill=theme["blue"], font=F_BODY)
+            bar_w = int(390 * value / max_value)
+            draw.rounded_rectangle((bx, y + 52, bx + 390, y + 78), radius=13, fill=theme["soft"])
+            draw.rounded_rectangle((bx, y + 52, bx + bar_w, y + 78), radius=13, fill=theme["blue"])
+            y += 102
     elif scene.kind == "table":
         draw.rounded_rectangle((74, y, 1006, y + 610), radius=18, fill="#ffffff", outline=theme["line"], width=2)
         draw.text((110, y + 30), "名称", fill=theme["blue"], font=F_SMALL)
@@ -333,12 +391,29 @@ def draw_scene(path: Path, profile: dict[str, Any], episode: Episode, scene: Sce
             draw.text((620, row_y), str(item["weight"]), fill=theme["ink"], font=F_SMALL)
             row_y += 62
     elif scene.kind == "metrics":
-        for i, (label, value) in enumerate(scene.items[:4]):
-            x = 74 if i % 2 == 0 else 548
-            yy = y + (i // 2) * 188
-            draw.rounded_rectangle((x, yy, x + 430, yy + 150), radius=18, fill="#ffffff", outline=theme["line"], width=2)
-            draw.text((x + 34, yy + 28), str(label), fill=theme["blue"], font=F_SMALL)
-            draw_wrapped(draw, str(value), (x + 34, yy + 76), 355, F_BODY, theme["ink"], 6, 2)
+        labels = [str(item[0]) for item in scene.items[:4]]
+        values = [str(item[1]) for item in scene.items[:4]]
+        if any("分位" in label for label in labels):
+            draw.rounded_rectangle((74, y, 1006, y + 420), radius=20, fill="#ffffff", outline=theme["line"], width=2)
+            for i, (label, value) in enumerate(scene.items[:3]):
+                x = 116 + i * 285
+                draw.text((x, y + 46), str(label), fill=theme["blue"], font=F_SMALL)
+                draw_wrapped(draw, str(value), (x, y + 96), 240, F_H2 if i == 0 else F_BODY, theme["ink"], 6, 2)
+            pct = next((v for l, v in zip(labels, values, strict=False) if "分位" in l), "")
+            draw_valuation_gauge(draw, 132, y + 286, 780, pct, theme)
+            y += 470
+            if len(scene.items) > 3:
+                label, value = scene.items[3]
+                draw.rounded_rectangle((74, y, 1006, y + 150), radius=18, fill=theme["soft"], outline=theme["line"], width=2)
+                draw.text((112, y + 34), str(label), fill=theme["blue"], font=F_SMALL)
+                draw_wrapped(draw, str(value), (112, y + 82), 820, F_BODY, theme["ink"], 6, 2)
+        else:
+            for i, (label, value) in enumerate(scene.items[:4]):
+                x = 74 if i % 2 == 0 else 548
+                yy = y + (i // 2) * 188
+                draw.rounded_rectangle((x, yy, x + 430, yy + 150), radius=18, fill="#ffffff", outline=theme["line"], width=2)
+                draw.text((x + 34, yy + 28), str(label), fill=theme["blue"], font=F_SMALL)
+                draw_wrapped(draw, str(value), (x + 34, yy + 76), 355, F_BODY, theme["ink"], 6, 2)
     elif scene.kind == "role":
         for i, (label, value) in enumerate(scene.items[:3], 1):
             x = 96 + (i - 1) * 315
@@ -348,19 +423,29 @@ def draw_scene(path: Path, profile: dict[str, Any], episode: Episode, scene: Sce
             draw_wrapped(draw, value, (x - 40, y + 208), 230, F_SMALL, theme["muted"], 8, 3)
     elif scene.kind == "history":
         returns = [(str(item["period"]), pct_float(item["return"])) for item in scene.items]
-        zero = y + 310
-        draw.line((116, zero, 980, zero), fill=theme["line"], width=3)
+        chart = (96, y + 10, 984, y + 590)
+        zero = y + 320
+        draw.rounded_rectangle(chart, radius=20, fill="#ffffff", outline=theme["line"], width=2)
+        for k in range(5):
+            yy = y + 90 + k * 92
+            draw.line((132, yy, 944, yy), fill=theme["soft"], width=2)
+        draw.line((132, zero, 944, zero), fill=theme["line"], width=3)
         step = 820 // max(1, len(returns) - 1)
         points = []
         for i, (year, value) in enumerate(returns):
-            x = 126 + i * step
+            x = 142 + i * step
             yy = zero - int(value * 6)
-            yy = max(y + 40, min(y + 560, yy))
+            yy = max(y + 70, min(y + 548, yy))
             points.append((x, yy))
-            draw.ellipse((x - 7, yy - 7, x + 7, yy + 7), fill=theme["accent"])
-            draw.text((x - 24, zero + 18), year[-2:], fill=theme["muted"], font=F_SMALL)
+            draw.line((x, zero, x, yy), fill=theme["soft"], width=14)
+            draw.ellipse((x - 8, yy - 8, x + 8, yy + 8), fill=theme["accent"])
+            draw.text((x - 24, zero + 28), year[-2:], fill=theme["muted"], font=F_SMALL)
         if len(points) >= 2:
-            draw.line(points, fill=theme["blue"], width=5)
+            area = [(points[0][0], zero), *points, (points[-1][0], zero)]
+            draw.polygon(area, fill=theme["soft"])
+            draw.line(points, fill=theme["blue"], width=6)
+            for x, yy in points:
+                draw.ellipse((x - 8, yy - 8, x + 8, yy + 8), fill=theme["accent"])
     img.save(path)
 
 
@@ -381,7 +466,7 @@ def video_quality(path: Path) -> dict[str, Any]:
     audio = next((item for item in streams if item.get("codec_type") == "audio"), None)
     duration = float(info.get("format", {}).get("duration") or 0)
     return {
-        "passed": path.exists() and path.stat().st_size > 0 and video.get("width") == 1080 and video.get("height") == 1920 and audio is not None and 60 <= duration <= 100,
+        "passed": path.exists() and path.stat().st_size > 0 and video.get("width") == 1080 and video.get("height") == 1920 and audio is not None and 60 <= duration <= 90,
         "duration_seconds": round(duration, 2),
         "resolution": f"{video.get('width')}x{video.get('height')}",
         "has_audio": audio is not None,
@@ -428,10 +513,18 @@ def render_episode(profile: dict[str, Any], episode: Episode, index_dir: Path, s
         speech.make_ass(ass, cues, voice_duration)
         raise_subtitle_safe_area(ass)
         segment = episode_dir / f"segment_{i:02d}.mp4"
+        out_fade_start = max(0.1, voice_duration + 0.08)
+        vf = (
+            "scale=1130:2010,"
+            "crop=1080:1920:25+sin(t*0.45)*8:45+cos(t*0.37)*6,"
+            "fade=t=in:st=0:d=0.22,"
+            f"fade=t=out:st={out_fade_start:.3f}:d=0.25,"
+            f"ass={ass.name},format=yuv420p"
+        )
         speech.run(
             [
                 "ffmpeg", "-y", "-loop", "1", "-framerate", "30", "-i", slide.name, "-i", voice.name,
-                "-t", f"{voice_duration + 0.35:.3f}", "-vf", f"ass={ass.name},format=yuv420p",
+                "-t", f"{voice_duration + 0.35:.3f}", "-vf", vf,
                 "-map", "0:v:0", "-map", "1:a:0", "-c:v", "libx264", "-preset", "medium",
                 "-c:a", "aac", "-b:a", "160k", "-shortest", segment.name,
             ],
