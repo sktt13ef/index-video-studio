@@ -85,6 +85,7 @@ F_H1 = font(48, True)
 F_H2 = font(40, True)
 F_BODY = font(32)
 F_SMALL = font(25)
+F_FOOTER = font(23)
 F_BADGE = font(28, True)
 F_NUM = font(44, True)
 
@@ -122,9 +123,9 @@ def sum_top_weight(profile: dict[str, Any]) -> str:
 
 
 def script_tail(text: str) -> str:
-    review_prompt = "正式发布前，需要再核对官方单张里的行业、权重和估值字段；如果字段变化，画面和口播要一起更新。不要把一个数字单独拿出来下结论，至少把样本范围、权重结构、估值区间和回撤放在同一张检查清单里看。如果准备用于正式发布，还要把同系列五条放在一起审核，确认没有重复，也没有互相矛盾。"
-    if review_prompt not in text:
-        text += review_prompt
+    product_closing = "最后做个小结：看指数时，不要只看名字或者单个数字，要把样本范围、权重结构、估值区间和历史回撤放在一起看。这样更容易判断它在组合里承担什么角色，也更容易理解它可能带来的波动。真正有用的指数观察，不是给出一个简单结论，而是把边界、结构和风险讲清楚。"
+    if product_closing not in text:
+        text += product_closing
     if DISCLAIMER not in text:
         text += DISCLAIMER
     if CTA not in text:
@@ -272,10 +273,10 @@ def base_slide(theme: dict[str, str], episode: Episode) -> tuple[Image.Image, Im
     draw_wrapped(draw, episode.title, (74, 276), 900, F_TITLE, theme["ink"], 16, 3)
     draw_wrapped(draw, episode.subtitle, (74, 508), 890, F_BODY, theme["muted"], 12, 2)
     draw.line((74, 650, 1006, 650), fill=theme["line"], width=3)
-    draw.line((74, 1688, 1006, 1688), fill=theme["line"], width=2)
-    draw_wrapped(draw, DISCLAIMER, (74, 1716), 920, F_SMALL, theme["muted"], 8, 2)
-    draw_wrapped(draw, CTA, (74, 1772), 920, F_SMALL, theme["muted"], 8, 1)
-    draw_wrapped(draw, DATA_NOTE, (74, 1814), 920, F_SMALL, theme["muted"], 8, 2)
+    draw.line((74, 1562, 1006, 1562), fill=theme["line"], width=2)
+    draw_wrapped(draw, DISCLAIMER, (74, 1588), 920, F_FOOTER, theme["muted"], 8, 2)
+    draw_wrapped(draw, CTA, (74, 1644), 920, F_FOOTER, theme["blue"], 8, 1)
+    draw_wrapped(draw, DATA_NOTE, (74, 1690), 920, F_FOOTER, theme["muted"], 8, 2)
     return img, draw
 
 
@@ -373,6 +374,13 @@ def video_quality(path: Path) -> dict[str, Any]:
     }
 
 
+def raise_subtitle_safe_area(path: Path) -> None:
+    content = path.read_text(encoding="utf-8-sig")
+    content = content.replace("Default,Microsoft YaHei,38,", "Default,Microsoft YaHei,36,")
+    content = content.replace(",76,76,260,1", ",76,76,405,1")
+    path.write_text(content, encoding="utf-8-sig")
+
+
 def write_json(path: Path, data: Any) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
@@ -392,6 +400,7 @@ def render_episode(profile: dict[str, Any], episode: Episode, index_dir: Path) -
             cues = speech.fallback_cues(scene.narration, voice_duration)
         ass = episode_dir / f"subtitles_{i:02d}.ass"
         speech.make_ass(ass, cues, voice_duration)
+        raise_subtitle_safe_area(ass)
         segment = episode_dir / f"segment_{i:02d}.mp4"
         speech.run(
             [
@@ -464,9 +473,9 @@ def write_report(run_dir: Path, results: list[dict[str, Any]]) -> None:
             f"<td>{quality['resolution']}</td><td>{quality['has_audio']}</td><td><a href='{item['relative_final']}'>final.mp4</a></td></tr>"
         )
     html = f"""<!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><title>中证重点指数15条样片</title>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>中证重点指数15条成品</title>
 <style>body{{margin:32px;font-family:Arial,'Microsoft YaHei',sans-serif;background:#f7f8fc;color:#121820}}table{{width:100%;border-collapse:collapse;background:white}}th,td{{border:1px solid #d8e2ec;padding:10px;text-align:left}}th{{background:#eef3fb}}a{{color:#315d8c}}</style></head>
-<body><h1>中证重点指数15条样片</h1><p>本批样片读取已批准的 profile 数据生成；用于人工检查画面、声音、字幕和数据追溯。</p>
+<body><h1>中证重点指数15条成品</h1><p>本批视频读取已批准的 profile 数据生成；已调整字幕安全区和片尾关注语，供最终复核。</p>
 <table><thead><tr><th>指数</th><th>集数</th><th>标题</th><th>质量</th><th>时长</th><th>分辨率</th><th>音频</th><th>视频</th></tr></thead><tbody>{''.join(rows)}</tbody></table></body></html>"""
     (run_dir / "sample_report.html").write_text(html, encoding="utf-8")
 
@@ -474,7 +483,7 @@ def write_report(run_dir: Path, results: list[dict[str, Any]]) -> None:
 def main() -> None:
     if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
         raise RuntimeError("需要 ffmpeg 和 ffprobe")
-    run_dir = RUNS_DIR / f"china_priority_samples_{datetime.now():%Y%m%d_%H%M%S}"
+    run_dir = RUNS_DIR / f"china_priority_products_{datetime.now():%Y%m%d_%H%M%S}"
     run_dir.mkdir(parents=True, exist_ok=False)
     results: list[dict[str, Any]] = []
     for index_id in INDEX_IDS:
