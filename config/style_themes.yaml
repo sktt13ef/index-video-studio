@@ -17,149 +17,149 @@ themes:
     label: A股宽基
     region: 中国内地
     index_type: broad_based
-    background: "#f3f5f7"
+    background: "#f6f8fb"
     surface: "#ffffff"
-    panel: "#e8eef5"
-    primary: "#102a43"
-    secondary: "#1d4f7a"
-    accent: "#b23b3b"
-    text: "#101820"
-    muted: "#596873"
-    border: "#d4dde6"
+    panel: "#eaf1f8"
+    primary: "#315d8c"
+    secondary: "#6f8ca8"
+    accent: "#c45d5d"
+    text: "#111820"
+    muted: "#5f6d78"
+    border: "#d8e2ec"
     shape: square_blocks
-    mood: 稳重、朴素、方正
+    mood: 浅色、稳重、方正
   china_dividend:
     label: A股红利
     region: 中国内地
     index_type: dividend
-    background: "#f6f1ee"
+    background: "#faf6f3"
     surface: "#ffffff"
-    panel: "#efe3dc"
-    primary: "#5a1f1f"
-    secondary: "#7a2e25"
-    accent: "#b88a3d"
-    text: "#1f1714"
-    muted: "#6e5d55"
-    border: "#dfd0c7"
+    panel: "#f1e6de"
+    primary: "#9a554c"
+    secondary: "#b9856e"
+    accent: "#c79a4d"
+    text: "#201817"
+    muted: "#74635b"
+    border: "#e4d3c9"
     shape: cashflow_blocks
-    mood: 现金流感、克制、不炫富
+    mood: 浅色、现金流感、克制
   hongkong:
     label: 港股
     region: 中国香港
     index_type: broad_based
-    background: "#f3f5f1"
+    background: "#f6f8f5"
     surface: "#ffffff"
-    panel: "#e6eee7"
-    primary: "#0f3f35"
-    secondary: "#6a2626"
-    accent: "#b08a45"
+    panel: "#e8f0ea"
+    primary: "#477766"
+    secondary: "#a86a65"
+    accent: "#bc9652"
     text: "#14201b"
-    muted: "#5f6d67"
-    border: "#d7e1dc"
+    muted: "#64726d"
+    border: "#d8e4dd"
     shape: mature_market
-    mood: 成熟市场感、稳重
+    mood: 浅色、成熟市场感、稳重
   us_broad:
     label: 美股宽基
     region: 美国
     index_type: broad_based
-    background: "#f5f7fa"
+    background: "#f7f9fc"
     surface: "#ffffff"
-    panel: "#e9eef5"
-    primary: "#12233d"
-    secondary: "#315d8c"
-    accent: "#8a99a8"
+    panel: "#edf2f7"
+    primary: "#466b96"
+    secondary: "#7f93aa"
+    accent: "#9aa8b8"
     text: "#111827"
-    muted: "#5d6875"
-    border: "#d8e0ea"
+    muted: "#62707f"
+    border: "#dbe4ee"
     shape: modern_blocks
-    mood: 现代、清晰、不过度赛博
+    mood: 浅色、现代、清晰
   us_technology:
     label: 美股科技
     region: 美国
     index_type: technology
-    background: "#f3f4f7"
+    background: "#f7f8fb"
     surface: "#ffffff"
-    panel: "#e8eaf2"
-    primary: "#101828"
-    secondary: "#233a63"
-    accent: "#5b5fc7"
+    panel: "#eceef7"
+    primary: "#546aa0"
+    secondary: "#7f8fb5"
+    accent: "#8d86cf"
     text: "#101820"
-    muted: "#5f6673"
-    border: "#d8dce8"
+    muted: "#626c7a"
+    border: "#dce1ee"
     shape: restrained_tech
-    mood: 科技感、克制、不花哨
+    mood: 浅色、科技感、克制
   europe:
     label: 欧洲
     region: 欧洲
     index_type: broad_based
-    background: "#f4f4f1"
+    background: "#f7f7f4"
     surface: "#ffffff"
-    panel: "#ecece7"
-    primary: "#1e2d45"
-    secondary: "#53606e"
-    accent: "#b08a45"
+    panel: "#efeee9"
+    primary: "#5c6f86"
+    secondary: "#858f9a"
+    accent: "#b99754"
     text: "#141a21"
-    muted: "#656d75"
-    border: "#d9ddd9"
+    muted: "#69717a"
+    border: "#dde0dc"
     shape: restrained_blocks
-    mood: 稳健、克制
+    mood: 浅色、稳健、克制
   japan:
     label: 日本
     region: 日本
     index_type: broad_based
-    background: "#f7f7f5"
+    background: "#fafafa"
     surface: "#ffffff"
-    panel: "#eeeeec"
-    primary: "#232323"
-    secondary: "#777777"
-    accent: "#b83a3a"
+    panel: "#f0f0ee"
+    primary: "#737373"
+    secondary: "#9a9a9a"
+    accent: "#c86464"
     text: "#181818"
     muted: "#666666"
-    border: "#dddddd"
+    border: "#dfdfdf"
     shape: minimal
-    mood: 极简、留白
+    mood: 浅色、极简、留白
   india:
     label: 印度
     region: 印度
     index_type: broad_based
-    background: "#f7f5ef"
+    background: "#faf8f1"
     surface: "#ffffff"
-    panel: "#edf1e8"
-    primary: "#17345a"
-    secondary: "#2f6f4e"
-    accent: "#c46a2c"
+    panel: "#eef3ea"
+    primary: "#426b8c"
+    secondary: "#6c9a78"
+    accent: "#d18a4a"
     text: "#14201b"
-    muted: "#5f6b62"
-    border: "#dce2d7"
+    muted: "#627067"
+    border: "#dfe6d9"
     shape: active_but_calm
-    mood: 有活力但克制
+    mood: 浅色、有活力但克制
   global:
     label: 全球指数
     region: 全球
     index_type: broad_based
-    background: "#f2f4f7"
+    background: "#f6f8fb"
     surface: "#ffffff"
-    panel: "#e7ebf0"
-    primary: "#111827"
-    secondary: "#1f4f7a"
-    accent: "#9ca8b5"
+    panel: "#edf1f5"
+    primary: "#526b87"
+    secondary: "#7c8fa4"
+    accent: "#a8b3c0"
     text: "#111827"
-    muted: "#5f6b78"
-    border: "#d8dee7"
+    muted: "#626f7c"
+    border: "#dce3eb"
     shape: international
-    mood: 国际化、黑蓝银灰
+    mood: 浅色、国际化、银灰蓝
   low_volatility:
     label: 低波动
     region: 通用
     index_type: low_volatility
-    background: "#f3f7f6"
+    background: "#f7faf9"
     surface: "#ffffff"
-    panel: "#e5efec"
-    primary: "#2c465a"
-    secondary: "#6f8f88"
-    accent: "#8fb39b"
+    panel: "#e9f2ef"
+    primary: "#5f7d8f"
+    secondary: "#86a59d"
+    accent: "#a5c6ad"
     text: "#14201b"
-    muted: "#60706a"
-    border: "#d6e2df"
+    muted: "#65736e"
+    border: "#d8e5e1"
     shape: stable_blocks
-    mood: 稳定感，但不暗示风险很低
+    mood: 浅色、稳定感，但不暗示风险很低

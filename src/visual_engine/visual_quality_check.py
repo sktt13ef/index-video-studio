@@ -22,9 +22,19 @@ def check_visual_asset(image_path: Path | str, metadata_path: Path | str | None 
     warnings: list[str] = []
 
     with Image.open(image_path) as image:
-        width, height = image.size
+        rgb = image.convert("RGB")
+        width, height = rgb.size
+        pixels = rgb.getdata()
+        dark_pixels = 0
+        for red, green, blue in pixels:
+            luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue
+            if luminance < 90:
+                dark_pixels += 1
+        dark_ratio = dark_pixels / max(width * height, 1)
     if (width, height) != (1080, 1920):
         errors.append(f"分辨率不是 1080x1920: {width}x{height}")
+    if dark_ratio > 0.08:
+        errors.append(f"深色面积过大: {dark_ratio:.2%}")
 
     if not metadata_path.exists():
         errors.append("缺少视觉元数据")
@@ -75,6 +85,7 @@ def check_visual_asset(image_path: Path | str, metadata_path: Path | str | None 
         "metadata": str(metadata_path),
         "errors": errors,
         "warnings": warnings,
+        "dark_ratio": round(dark_ratio, 4),
     }
 
 

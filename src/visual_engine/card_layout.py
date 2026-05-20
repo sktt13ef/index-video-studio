@@ -42,15 +42,18 @@ def _write_lines(
 
 def _draw_header(draw: ImageDraw.ImageDraw, theme: Theme, canvas: CanvasSpec, label: str, episode: str | None = None) -> dict[str, Any]:
     header_h = 196
-    draw.rectangle((0, 0, canvas.width, header_h), fill=theme.primary)
-    boxes = _write_lines(draw, (canvas.safe_margin, 74), [label], font_size=30, fill=theme.surface, bold=True)
+    draw.rectangle((0, 0, canvas.width, header_h), fill=theme.background)
+    draw.rectangle((0, 0, canvas.width, 14), fill=theme.accent)
+    _rounded(draw, (canvas.safe_margin, 48, canvas.width - canvas.safe_margin, 148), 18, theme.surface, theme.border, 3)
+    draw.rectangle((canvas.safe_margin + 28, 84, canvas.safe_margin + 104, 94), fill=theme.accent)
+    boxes = _write_lines(draw, (canvas.safe_margin + 132, 72), [label], font_size=30, fill=theme.primary, bold=True)
     if episode:
         pill_w = 258
         pill_h = 64
-        x2 = canvas.width - canvas.safe_margin
+        x2 = canvas.width - canvas.safe_margin - 28
         x1 = x2 - pill_w
         y1 = 66
-        _rounded(draw, (x1, y1, x2, y1 + pill_h), 32, theme.surface, None)
+        _rounded(draw, (x1, y1, x2, y1 + pill_h), 32, theme.panel, theme.border, 3)
         pill_font = load_font(34, bold=True)
         bbox = draw.textbbox((0, 0), episode, font=pill_font)
         draw.text((x1 + (pill_w - (bbox[2] - bbox[0])) / 2, y1 + 12), episode, font=pill_font, fill=theme.primary)
@@ -171,9 +174,14 @@ def render_body_card(
         row_y = point_y + (idx - 1) * (row_h + 22)
         _rounded(draw, (inner_x, row_y, panel_x2 - 44, row_y + row_h), 12, theme.surface, None)
         badge_size = 48
-        draw.ellipse((inner_x + 22, row_y + 17, inner_x + 22 + badge_size, row_y + 17 + badge_size), fill=theme.primary)
+        draw.ellipse(
+            (inner_x + 22, row_y + 17, inner_x + 22 + badge_size, row_y + 17 + badge_size),
+            fill=theme.panel,
+            outline=theme.accent,
+            width=3,
+        )
         badge_font = load_font(26, bold=True)
-        draw.text((inner_x + 39, row_y + 22), str(idx), font=badge_font, fill=theme.surface)
+        draw.text((inner_x + 39, row_y + 22), str(idx), font=badge_font, fill=theme.primary)
         lines = wrap_text(draw, point, point_font, inner_w - 106, max_visual_chars=28)
         line = lines[0] if lines else point
         draw.text((inner_x + 96, row_y + 20), line, font=point_font, fill=theme.text)
