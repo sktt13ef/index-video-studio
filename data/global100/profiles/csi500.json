@@ -1,12 +1,9 @@
 {
   "index_id": "csi500",
-  "data_status": "needs_data",
-  "render_status": "partially_enriched_needs_review",
-  "review_status": "pending",
-  "missing_items": [
-    "methodology_manual_parse",
-    "sector_weights"
-  ],
+  "data_status": "ready",
+  "render_status": "approved_for_sample",
+  "review_status": "approved",
+  "missing_items": [],
   "basic_info": {
     "index_name_cn": "中证500",
     "index_name_en": "CSI 500",
@@ -23,14 +20,90 @@
     "identity_status": "catalog_candidate"
   },
   "methodology_summary": {
-    "status": "source_registered_needs_manual_parse",
-    "summary": "已登记官方页面和编制规则入口；正式出片前仍需人工核验样本空间、选样规则、加权方式和调样频率。",
-    "source_id": "official_methodology"
+    "status": "ready",
+    "summary": "从全部A股中剔除沪深300样本和最近一年日均总市值排名靠前的部分证券后，选取日均总市值靠前、流动性较好的500只证券，反映A股中盘公司整体表现。",
+    "sample_scope": "沪深市场中盘公司",
+    "selection_focus": [
+      "中盘市值",
+      "流动性",
+      "与沪深300互补"
+    ],
+    "rebalance_frequency": "每半年",
+    "source_id": "csi_methodology",
+    "human_confirmed": true
   },
   "sector_weights": {
-    "status": "missing",
-    "items": [],
-    "required_for_video": "02_holdings_breakdown"
+    "status": "ready",
+    "items": [
+      {
+        "name": "信息技术",
+        "weight": "24.6%",
+        "source_field": "行业权重分布/信息技术",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "工业",
+        "weight": "20.2%",
+        "source_field": "行业权重分布/工业",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "原材料",
+        "weight": "17.4%",
+        "source_field": "行业权重分布/原材料",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "可选消费",
+        "weight": "8.1%",
+        "source_field": "行业权重分布/可选消费",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "通信服务",
+        "weight": "7.7%",
+        "source_field": "行业权重分布/通信服务",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "医药卫生",
+        "weight": "6.4%",
+        "source_field": "行业权重分布/医药卫生",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "公用事业",
+        "weight": "6.4%",
+        "source_field": "行业权重分布/公用事业",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "能源",
+        "weight": "3.3%",
+        "source_field": "行业权重分布/能源",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "房地产",
+        "weight": "2.9%",
+        "source_field": "行业权重分布/房地产",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "金融",
+        "weight": "2.3%",
+        "source_field": "行业权重分布/金融",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "主要消费",
+        "weight": "0.7%",
+        "source_field": "行业权重分布/主要消费",
+        "source_id": "csi_factsheet"
+      }
+    ],
+    "required_for_video": "02_holdings_breakdown",
+    "calculation_method": "中证指数官方单张行业权重分布；用于成片展示TOP5。"
   },
   "top_holdings": {
     "status": "ready",
@@ -223,24 +296,33 @@
   },
   "dividend_metrics": {
     "status": "not_required",
-    "items": [],
+    "items": [
+      {
+        "label": "股息率当前值",
+        "metric": "dividend_yield",
+        "category": "dividend_yield",
+        "value": "1.26%",
+        "source_id": "valuation_series",
+        "calculation_method": "中证指数公开估值序列最新值。"
+      }
+    ],
     "required_for_video": "05_valuation_view"
   },
   "risk_points": {
-    "status": "catalog_draft_needs_review",
+    "status": "ready",
     "items": [
-      "中盘股波动和行业轮动更明显"
-    ]
+      "中盘公司波动通常高于大盘宽基",
+      "行业轮动会明显影响阶段表现",
+      "成分股分散不等于回撤低"
+    ],
+    "source_id": "manual_investment_framework",
+    "human_confirmed": true
   },
   "role_in_portfolio": {
-    "status": "catalog_draft_needs_review",
-    "summary": "中盘风格补充",
-    "must_confirm": [
-      "核心/卫星定位",
-      "适合搭配对象",
-      "不适合承担的角色",
-      "主要回撤来源"
-    ]
+    "status": "ready",
+    "summary": "A股中盘风格补充，适合和大盘宽基一起观察市场层次。",
+    "source_id": "manual_investment_framework",
+    "human_confirmed": true
   },
   "source_items": [
     {
@@ -316,9 +398,47 @@
       "calculation_method": "用于读取当前PE、股息率，并计算PE区间和分位。",
       "human_confirmed": false,
       "allowed_for_final_numbers": true
+    },
+    {
+      "source_id": "csi_factsheet",
+      "source_type": "official_factsheet",
+      "title": "中证500指数单张",
+      "url": "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/indices/detail/files/zh_CN/000905factsheet.pdf",
+      "file": "D:\\etf\\data\\global100\\source_cache\\csi500\\000905factsheet.pdf",
+      "data_date": "2026年3月31日",
+      "fields": [
+        "basic_info",
+        "sector_weights",
+        "top_holdings",
+        "returns",
+        "volatility",
+        "valuation"
+      ],
+      "calculation_method": null,
+      "human_confirmed": true,
+      "allowed_for_final_numbers": true
+    },
+    {
+      "source_id": "csi_methodology",
+      "source_type": "official_methodology",
+      "title": "中证500编制规则摘要",
+      "url": "https://www.csindex.com.cn/zh-CN/indices/index-detail/000905",
+      "file": "D:\\etf\\data\\global100\\source_cache\\csi500\\000905factsheet.txt",
+      "data_date": "2026年3月31日",
+      "fields": [
+        "sample_scope",
+        "selection_focus",
+        "rebalance_frequency"
+      ],
+      "calculation_method": "根据中证指数官方页面和指数单张摘要人工确认。",
+      "human_confirmed": true,
+      "allowed_for_final_numbers": false
     }
   ],
-  "data_date": "2026-05-20",
+  "data_date": {
+    "factsheet": "2026年3月31日",
+    "production_data": "2026-05-20"
+  },
   "calculation_notes": [
     "当前 profile 是生产计划资料，不是成片数据文件。",
     "缺口补齐前不得生成成品视频。",
