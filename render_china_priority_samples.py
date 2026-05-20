@@ -476,8 +476,14 @@ def video_quality(path: Path) -> dict[str, Any]:
 
 def raise_subtitle_safe_area(path: Path) -> None:
     content = path.read_text(encoding="utf-8-sig")
-    content = content.replace("Default,Microsoft YaHei,38,", "Default,Microsoft YaHei,36,")
-    content = content.replace(",76,76,260,1", ",76,76,405,1")
+    content = content.replace(
+        "Style: Default,Microsoft YaHei,38,&H00FFFFFF,&H000000FF,&H6A12201B,&HAA12201B,1,0,0,0,100,100,0,0,1,3,0,2,76,76,260,1",
+        "Style: Default,Noto Sans SC,34,&H00857066,&H000000FF,&H00FCF8F7,&H00FCF8F7,1,0,0,0,100,100,0,0,1,2,0,2,110,110,420,1",
+    )
+    content = content.replace(
+        "Style: Default,Microsoft YaHei,36,&H00FFFFFF,&H000000FF,&H6A12201B,&HAA12201B,1,0,0,0,100,100,0,0,1,3,0,2,76,76,405,1",
+        "Style: Default,Noto Sans SC,34,&H00857066,&H000000FF,&H00FCF8F7,&H00FCF8F7,1,0,0,0,100,100,0,0,1,2,0,2,110,110,420,1",
+    )
     path.write_text(content, encoding="utf-8-sig")
 
 
