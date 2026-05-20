@@ -1,22 +1,12 @@
 {
   "index_id": "csi300",
-  "data_status": "needs_data",
-  "render_status": "blocked_until_ready",
-  "missing_items": [
-    "official_index_page",
-    "official_methodology",
-    "sector_weights",
-    "top_holdings",
-    "historical_price_series",
-    "historical_returns",
-    "max_drawdown",
-    "source_date",
-    "valuation_metrics"
-  ],
+  "data_status": "ready",
+  "render_status": "ready_for_review",
+  "missing_items": [],
   "basic_info": {
     "index_name_cn": "沪深300",
     "index_name_en": "CSI 300",
-    "index_code": "CSI300",
+    "index_code": "000300",
     "provider": "中证指数",
     "region": "中国内地",
     "market": "China A-share",
@@ -26,98 +16,420 @@
     "style_theme": "china",
     "catalog_focus": "A股大盘核心公司",
     "catalog_asset_class": "股票宽基",
-    "identity_status": "catalog_candidate"
+    "identity_status": "official_verified"
   },
   "methodology_summary": {
-    "status": "needs_official_methodology",
-    "draft_from_catalog": "从目录描述看，该指数关注：A股大盘核心公司。",
-    "must_confirm": [
-      "样本空间",
-      "选样规则",
-      "加权方式",
-      "调样频率",
-      "成分限制"
-    ]
+    "status": "ready",
+    "summary": "从沪深市场中选取规模大、流动性好的代表性证券，样本按规则定期调整。",
+    "sample_scope": "沪深市场",
+    "selection_focus": [
+      "规模",
+      "流动性",
+      "代表性"
+    ],
+    "rebalance_frequency": "每半年",
+    "source_id": "csi_methodology"
   },
   "sector_weights": {
-    "status": "missing",
-    "items": [],
+    "status": "ready",
+    "items": [
+      {
+        "name": "金融",
+        "weight": "21.0%",
+        "source_field": "行业权重分布/金融",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "工业",
+        "weight": "18.8%",
+        "source_field": "行业权重分布/工业",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "信息技术",
+        "weight": "16.1%",
+        "source_field": "行业权重分布/信息技术",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "可选消费",
+        "weight": "10.2%",
+        "source_field": "行业权重分布/可选消费",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "name": "主要消费",
+        "weight": "8.0%",
+        "source_field": "行业权重分布/主要消费",
+        "source_id": "csi_factsheet"
+      }
+    ],
     "required_for_video": "02_holdings_breakdown"
   },
   "top_holdings": {
-    "status": "missing",
-    "items": [],
+    "status": "ready",
+    "items": [
+      {
+        "code": "300750",
+        "name": "宁德时代",
+        "industry": "工业",
+        "exchange": "深圳",
+        "weight": "4.37%",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "code": "600519",
+        "name": "贵州茅台",
+        "industry": "主要消费",
+        "exchange": "上海",
+        "weight": "3.74%",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "code": "300308",
+        "name": "中际旭创",
+        "industry": "通信服务",
+        "exchange": "深圳",
+        "weight": "2.60%",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "code": "601318",
+        "name": "中国平安",
+        "industry": "金融",
+        "exchange": "上海",
+        "weight": "2.49%",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "code": "601899",
+        "name": "紫金矿业",
+        "industry": "原材料",
+        "exchange": "上海",
+        "weight": "2.22%",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "code": "600036",
+        "name": "招商银行",
+        "industry": "金融",
+        "exchange": "上海",
+        "weight": "2.00%",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "code": "300502",
+        "name": "新易盛",
+        "industry": "通信服务",
+        "exchange": "深圳",
+        "weight": "1.81%",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "code": "000333",
+        "name": "美的集团",
+        "industry": "可选消费",
+        "exchange": "深圳",
+        "weight": "1.55%",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "code": "600900",
+        "name": "长江电力",
+        "industry": "公用事业",
+        "exchange": "上海",
+        "weight": "1.36%",
+        "source_id": "csi_factsheet"
+      },
+      {
+        "code": "601166",
+        "name": "兴业银行",
+        "industry": "金融",
+        "exchange": "上海",
+        "weight": "1.31%",
+        "source_id": "csi_factsheet"
+      }
+    ],
     "required_for_video": "02_holdings_breakdown"
   },
   "valuation_metrics": {
-    "status": "missing",
+    "status": "ready",
+    "items": [
+      {
+        "label": "PE当前值",
+        "metric": "pe",
+        "category": "pe",
+        "value": "13.85",
+        "calculation_method": "公开 PE 历史序列最新值。",
+        "source_id": "valuation_pe_pb_series"
+      },
+      {
+        "label": "PE历史区间",
+        "metric": "pe_range",
+        "category": "valuation_range",
+        "value": "7.87-50.77",
+        "calculation_method": "公开 PE 历史序列最小值到最大值。",
+        "source_id": "valuation_pe_pb_series"
+      },
+      {
+        "label": "PE分位",
+        "metric": "pe_percentile",
+        "category": "valuation_percentile",
+        "value": "68%",
+        "calculation_method": "公开 PE 历史序列中小于等于当前值的样本占比。",
+        "source_id": "valuation_pe_pb_series"
+      },
+      {
+        "label": "PB当前值",
+        "metric": "pb",
+        "category": "pb",
+        "value": "1.45",
+        "calculation_method": "公开 PB 历史序列最新值。",
+        "source_id": "valuation_pe_pb_series"
+      },
+      {
+        "label": "PB历史区间",
+        "metric": "pb_range",
+        "category": "valuation_range",
+        "value": "1.13-7.47",
+        "calculation_method": "公开 PB 历史序列最小值到最大值。",
+        "source_id": "valuation_pe_pb_series"
+      },
+      {
+        "label": "PB分位",
+        "metric": "pb_percentile",
+        "category": "valuation_percentile",
+        "value": "33%",
+        "calculation_method": "公开 PB 历史序列中小于等于当前值的样本占比。",
+        "source_id": "valuation_pe_pb_series"
+      },
+      {
+        "label": "股息率当前值",
+        "metric": "dividend_yield",
+        "category": "dividend_yield",
+        "value": "2.54%",
+        "calculation_method": "官方指标表股息率字段最新值。",
+        "source_id": "official_indicator_xls"
+      },
+      {
+        "label": "股息率近期区间",
+        "metric": "dividend_yield_range",
+        "category": "valuation_range",
+        "value": "2.49%-2.60%",
+        "calculation_method": "官方指标表股息率字段样本的最小值到最大值。",
+        "source_id": "official_indicator_xls"
+      }
+    ],
     "required_for_video": "05_valuation_view",
-    "expected_by_type": [
-      "pe",
-      "pb",
-      "dividend_yield",
-      "valuation_range",
-      "valuation_percentile"
-    ]
+    "calculation_method": "PE/PB 使用公开历史序列计算当前值、历史区间和分位；股息率使用官方指标表。"
   },
   "historical_returns": {
-    "status": "missing",
-    "items": [],
-    "required_for_video": "04_return_drawdown_risk"
+    "status": "ready",
+    "items": [
+      {
+        "label": "2019年度收益",
+        "period": "2019",
+        "return": "36.07%",
+        "sample_range": "2005-04-08 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2020年度收益",
+        "period": "2020",
+        "return": "27.21%",
+        "sample_range": "2005-04-08 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2021年度收益",
+        "period": "2021",
+        "return": "-5.20%",
+        "sample_range": "2005-04-08 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2022年度收益",
+        "period": "2022",
+        "return": "-21.63%",
+        "sample_range": "2005-04-08 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2023年度收益",
+        "period": "2023",
+        "return": "-11.38%",
+        "sample_range": "2005-04-08 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2024年度收益",
+        "period": "2024",
+        "return": "14.68%",
+        "sample_range": "2005-04-08 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2025年度收益",
+        "period": "2025",
+        "return": "17.66%",
+        "sample_range": "2005-04-08 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2026年度收益",
+        "period": "2026",
+        "return": "4.82%",
+        "sample_range": "2005-04-08 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      }
+    ],
+    "required_for_video": "04_return_drawdown_risk",
+    "sample_range": "2005-04-08 至 2026-05-19"
   },
   "drawdown_stats": {
-    "status": "missing",
-    "items": [],
-    "required_for_video": "04_return_drawdown_risk",
-    "calculation_required": "使用公开历史点位计算最大回撤、回撤区间和恢复情况。"
+    "status": "ready",
+    "items": [
+      {
+        "label": "最大回撤",
+        "max_drawdown": "-72.30%",
+        "calculation_range": "2005-04-08 至 2026-05-19",
+        "calculation_method": "用发布以来的收盘点位序列计算累计净值回撤。",
+        "source_id": "history_price_series"
+      }
+    ],
+    "required_for_video": "04_return_drawdown_risk"
   },
   "dividend_metrics": {
-    "status": "required_for_dividend_only",
-    "items": [],
+    "status": "ready",
+    "items": [
+      {
+        "label": "股息率当前值",
+        "value": "2.54%",
+        "source_id": "official_indicator_xls"
+      }
+    ],
     "required_for_video": "05_valuation_view"
   },
   "risk_points": {
-    "status": "catalog_draft_needs_review",
+    "status": "ready",
     "items": [
-      "金融消费等权重行业变化会影响表现"
+      "偏大盘核心公司，不代表中小盘。",
+      "行业权重和前十大公司变化会影响阶段表现。",
+      "历史样本中出现过明显回撤，组合需要考虑承受能力。"
     ]
   },
   "role_in_portfolio": {
-    "status": "catalog_draft_needs_review",
-    "summary": "A股核心宽基暴露",
-    "must_confirm": [
-      "核心/卫星定位",
-      "适合搭配对象",
-      "不适合承担的角色",
-      "主要回撤来源"
+    "status": "ready",
+    "summary": "A股大盘核心公司观察",
+    "role": "权益资产中的A股大盘核心仓位参照。",
+    "not_for": [
+      "不代表中小盘",
+      "不代表单一行业",
+      "不单独承担回撤控制"
     ]
   },
   "source_items": [
     {
-      "source_id": "global_index_catalog_500",
-      "source_type": "catalog",
-      "path": "data/global_index_catalog_500.csv",
-      "fields_used": [
-        "code",
-        "name",
-        "region",
-        "provider",
-        "asset_class",
-        "focus",
-        "role",
-        "risks",
-        "theme"
+      "source_id": "csi_index_page",
+      "source_type": "official_index_page",
+      "title": "中证指数沪深300页面",
+      "url": "https://www.csindex.com.cn/zh-CN/indices/index-detail/000300",
+      "file": null,
+      "data_date": "2026年3月31日",
+      "fields": [
+        "index_name",
+        "index_code"
       ],
-      "allowed_for_final_numbers": false
+      "calculation_method": null,
+      "human_confirmed": false
+    },
+    {
+      "source_id": "csi_factsheet",
+      "source_type": "official_factsheet",
+      "title": "沪深300指数单张",
+      "url": "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/indices/detail/files/zh_CN/000300factsheet.pdf",
+      "file": "D:\\etf\\data\\global50\\source_cache\\csi300\\000300factsheet.pdf",
+      "data_date": "2026年3月31日",
+      "fields": [
+        "basic_info",
+        "sector_weights",
+        "top_holdings",
+        "returns",
+        "volatility",
+        "valuation"
+      ],
+      "calculation_method": null,
+      "human_confirmed": false
+    },
+    {
+      "source_id": "csi_methodology",
+      "source_type": "official_methodology",
+      "title": "沪深300指数编制方案",
+      "url": "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/indices/detail/files/zh_CN/000300_Index_Methodology_cn.pdf",
+      "file": "D:\\etf\\data\\global50\\source_cache\\csi300\\000300_Index_Methodology_cn.pdf",
+      "data_date": "2026年3月31日",
+      "fields": [
+        "methodology",
+        "rebalance_frequency"
+      ],
+      "calculation_method": null,
+      "human_confirmed": false
+    },
+    {
+      "source_id": "history_price_series",
+      "source_type": "public_price_series",
+      "title": "沪深300公开日线点位",
+      "url": null,
+      "file": "D:\\etf\\data\\global50\\source_cache\\csi300\\sh000300_history_akshare_sina.csv",
+      "data_date": "2026-05-19",
+      "fields": [
+        "date",
+        "close"
+      ],
+      "calculation_method": "用于计算历史走势、年度收益、最新点位、最大回撤和恢复情况。",
+      "human_confirmed": false
+    },
+    {
+      "source_id": "valuation_pe_pb_series",
+      "source_type": "public_valuation_series",
+      "title": "沪深300 PE/PB 历史序列",
+      "url": null,
+      "file": "D:\\etf\\data\\global50\\source_cache\\csi300\\hs300_pe_history_legulegu.csv",
+      "data_date": "2026-05-19",
+      "fields": [
+        "pe",
+        "pb"
+      ],
+      "calculation_method": "用于计算 PE/PB 历史区间和分位。",
+      "human_confirmed": false
+    },
+    {
+      "source_id": "official_indicator_xls",
+      "source_type": "official_factsheet",
+      "title": "中证指数指标表",
+      "url": "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/file/autofile/indicator/000300indicator.xls",
+      "file": "D:\\etf\\data\\global50\\source_cache\\csi300\\000300indicator.xls",
+      "data_date": "2026年3月31日",
+      "fields": [
+        "dividend_yield"
+      ],
+      "calculation_method": "用于计算股息率近期区间。",
+      "human_confirmed": false
     }
   ],
-  "data_date": {
-    "catalog_data": "not_dated",
-    "production_data": "not_collected"
-  },
+  "data_date": "2026年3月31日",
   "calculation_notes": [
-    "当前 profile 是生产计划资料，不是成片数据文件。",
-    "缺口补齐前不得生成成品视频。",
-    "未来 data_used.json 必须记录每个数字的来源、字段、区间和计算方法。"
-  ]
+    "沪深300数据由官方单张、官方编制方案、官方指标表和公开行情序列组成。",
+    "历史收益和最大回撤由公开日线点位计算。",
+    "PE/PB 区间和分位由公开估值历史序列计算。"
+  ],
+  "review_status": "pending"
 }

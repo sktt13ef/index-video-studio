@@ -152,6 +152,13 @@ def number_source_id(sources: list[dict[str, Any]]) -> str:
     return str((sources[0] or {}).get("source_id")) if sources else "unknown_source"
 
 
+def source_by_id(sources: list[dict[str, Any]], source_id: str) -> dict[str, Any] | None:
+    for source in sources:
+        if source.get("source_id") == source_id:
+            return source
+    return sources[0] if sources else None
+
+
 def data_number(
     *,
     label: str,
@@ -183,9 +190,9 @@ def data_number(
 
 
 def extract_numbers(profile: dict[str, Any], episode_slug: str, sources: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    source = sources[0] if sources else None
     numbers: list[dict[str, Any]] = []
     if episode_slug == "02_holdings_breakdown":
+        source = source_by_id(sources, "csi_factsheet")
         for item in (profile.get("sector_weights") or {}).get("items") or []:
             label = item.get("name") or item.get("sector") or item.get("label")
             value = item.get("weight") or item.get("value")
@@ -217,6 +224,7 @@ def extract_numbers(profile: dict[str, Any], episode_slug: str, sources: list[di
                     )
                 )
     if episode_slug == "04_return_drawdown_risk":
+        source = source_by_id(sources, "history_price_series")
         for item in (profile.get("historical_returns") or {}).get("items") or []:
             label = item.get("label") or item.get("period") or "historical return"
             value = item.get("return") or item.get("value")
@@ -248,6 +256,8 @@ def extract_numbers(profile: dict[str, Any], episode_slug: str, sources: list[di
                     )
                 )
     if episode_slug == "05_valuation_view":
+        valuation_source = source_by_id(sources, "valuation_pe_pb_series")
+        dividend_source = source_by_id(sources, "official_indicator_xls")
         metrics = profile.get("valuation_metrics") or {}
         metric_items = metrics.get("items") if isinstance(metrics, dict) else None
         if isinstance(metric_items, list):
@@ -256,6 +266,7 @@ def extract_numbers(profile: dict[str, Any], episode_slug: str, sources: list[di
                 value = item.get("value")
                 category = str(item.get("category") or item.get("metric") or "valuation_range")
                 if label and value is not None:
+                    source = dividend_source if "dividend" in category or "股息" in str(label) else valuation_source
                     numbers.append(
                         data_number(
                             label=label,
@@ -270,6 +281,7 @@ def extract_numbers(profile: dict[str, Any], episode_slug: str, sources: list[di
             for key, category in [("pe", "pe"), ("pb", "pb"), ("dividend_yield", "dividend_yield"), ("valuation_percentile", "valuation_percentile"), ("valuation_range", "valuation_range")]:
                 value = metrics.get(key)
                 if value not in (None, "", [], {}):
+                    source = dividend_source if key == "dividend_yield" else valuation_source
                     numbers.append(
                         data_number(
                             label=key,

@@ -79,3 +79,29 @@ runs/global50_dry_run_时间戳/
 - `{index_id}/episode_*/data_used.json`
 - `{index_id}/episode_*/manifest.json`
 - `{index_id}/episode_*/quality_report.html`
+
+## 数据补齐到 ready
+
+先从可验证的数据源做起，不硬凑 50 个指数。当前已提供沪深300的数据补齐入口：
+
+```powershell
+python enrich_global50_ready_data.py --index csi300
+```
+
+它会更新：
+
+- `data/global50/profiles/csi300.json`
+- `data/global50/global50_plan.csv`
+- `data/global50/source_cache/csi300/`
+
+沪深300补齐的数据包括：
+
+- 官方指数页面、官方单张、官方编制方案
+- 行业权重 TOP5
+- 前十大权重股
+- 历史年度收益
+- 历史最大回撤
+- PE/PB 当前值、历史区间和分位
+- 股息率当前值和近期区间
+
+运行后该指数会变成 `data_status=ready`，但 `review_status` 保持 `pending`。这是故意的：数据准备好不等于人工审核已经批准，正式出片仍然需要显式批准。
