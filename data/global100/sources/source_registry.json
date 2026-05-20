@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "project": "global100",
+  "source_policy": {
+    "principle": "AI 只负责表达，不负责事实。所有成片数字必须来自结构化数据或代码计算。",
+    "ready_rule": "只有 data_status=ready 且 review_status=approved 的指数才能进入正式渲染。",
+    "no_empty_video_data": "成品画面不得出现未提供、暂无、数据缺失等占位表达。"
+  },
+  "content_rules": [
+    "成品视频里不出现“科普”。",
+    "不出现“新手”“小白”。",
+    "不出现“评分”。",
+    "不出现投资建议表达，不预测未来涨跌。",
+    "所有数字必须来自结构化数据或代码计算结果。",
+    "缺关键数据时进入 needs_review，不生成成品。",
+    "成品画面不得出现空数据、缺数据、未提供、暂无。"
+  ],
+  "required_profile_fields": [
+    "basic_info",
+    "methodology_summary",
+    "sector_weights",
+    "top_holdings",
+    "valuation_metrics",
+    "historical_returns",
+    "drawdown_stats",
+    "dividend_metrics",
+    "risk_points",
+    "role_in_portfolio",
+    "source_items",
+    "data_date",
+    "calculation_notes"
+  ]
+}
