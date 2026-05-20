@@ -44,8 +44,9 @@ def patch_light_theme() -> None:
 
     def draw_footer(draw: ImageDraw.ImageDraw) -> None:
         draw.line((72, 1696, 1008, 1696), fill=csi300.LINE, width=2)
-        csi300.draw_text(draw, csi300.DISCLAIMER, (72, 1732), 936, csi300.F_SMALL, csi300.MUTED, 6, 2)
-        csi300.draw_text(draw, csi300.DATA_NOTE, (72, 1788), 936, csi300.F_SMALL, csi300.MUTED, 6, 2)
+        csi300.draw_text(draw, csi300.DISCLAIMER, (72, 1722), 936, csi300.F_SMALL, csi300.MUTED, 6, 2)
+        csi300.draw_text(draw, csi300.CTA, (72, 1782), 936, csi300.F_SMALL, csi300.MUTED, 6, 1)
+        csi300.draw_text(draw, csi300.DATA_NOTE, (72, 1822), 936, csi300.F_SMALL, csi300.MUTED, 6, 2)
 
     def draw_scene_header(draw: ImageDraw.ImageDraw, scene: csi300.Scene) -> None:
         draw.rounded_rectangle((72, 730, 1008, 926), radius=22, fill=csi300.SOFT, outline=csi300.LINE, width=2)

@@ -37,6 +37,7 @@ METHODOLOGY_URL = "https://oss-ch.csindex.com.cn/static/html/csindex/public/uplo
 INDEX_PAGE_URL = "https://www.csindex.com.cn/zh-CN/indices/index-detail/000300"
 
 DISCLAIMER = "仅作指数观察，不构成投资建议；本视频由 AI 辅助生成。"
+CTA = "感谢观看，可以点点关注，继续了解更多指数观察。"
 DATA_NOTE = "数据来源：中证指数单张、公开历史行情；发布前请以最新公开资料为准"
 
 INK = "#14201b"
@@ -377,8 +378,9 @@ def draw_base(draw: ImageDraw.ImageDraw, spec: VideoSpec) -> None:
 
 def draw_footer(draw: ImageDraw.ImageDraw) -> None:
     draw.line((92, 1696, 988, 1696), fill=LINE, width=2)
-    draw.text((92, 1732), DISCLAIMER, fill=MUTED, font=F_SMALL)
-    draw_text(draw, DATA_NOTE, (92, 1772), 880, F_SMALL, MUTED, 6, 2)
+    draw_text(draw, DISCLAIMER, (92, 1722), 880, F_SMALL, MUTED, 6, 2)
+    draw_text(draw, CTA, (92, 1782), 880, F_SMALL, MUTED, 6, 1)
+    draw_text(draw, DATA_NOTE, (92, 1822), 880, F_SMALL, MUTED, 6, 2)
 
 
 def draw_scene_header(draw: ImageDraw.ImageDraw, scene: Scene) -> None:
@@ -967,6 +969,8 @@ def render_video(spec: VideoSpec, data: Csi300Data, output_root: Path) -> Path:
     run_dir.mkdir(parents=True, exist_ok=True)
     data_used = build_episode_data_used(spec, data)
     full_script_parts = [scene.narration.strip() for scene in spec.scenes]
+    if full_script_parts and CTA not in full_script_parts[-1]:
+        full_script_parts[-1] = full_script_parts[-1] + CTA
     full_script = "".join(full_script_parts)
     metadata = episode_metadata(spec, data, data_used["source_items"])
     payload = {
@@ -996,6 +1000,8 @@ def render_video(spec: VideoSpec, data: Csi300Data, output_root: Path) -> Path:
         slide = run_dir / f"scene_{idx + 1:02d}.png"
         make_slide(slide, spec, idx, data)
         narration = scene.narration.strip()
+        if idx == len(spec.scenes) - 1 and CTA not in narration:
+            narration += CTA
         voice = run_dir / f"voice_{idx + 1:02d}.mp3"
         cues = asyncio.run(make_voice_and_cues(narration, voice))
         voice_duration = duration(voice)

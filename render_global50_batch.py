@@ -487,7 +487,7 @@ def render_episode_preview(
         section_title="本条画面重点",
         points=storyboard_points(profile, draft, missing),
         episode=f"{episode_number}/5",
-        source_note="仅作指数观察，不构成投资建议；本视频由 AI 辅助生成。",
+        source_note="仅作指数观察，不构成投资建议；本视频由 AI 辅助生成。感谢观看，可以点点关注，继续了解更多指数观察。",
         canvas=canvas,
         font_spec=font_spec,
     )

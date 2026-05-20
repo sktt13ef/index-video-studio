@@ -25,6 +25,7 @@ EPISODE_SLUGS = [
     "04_return_drawdown_risk",
     "05_valuation_view",
 ]
+CTA = "感谢观看，可以点点关注，继续了解更多指数观察。"
 
 
 class SafeFormatDict(dict):
@@ -121,12 +122,15 @@ def context_from_profile(profile: dict[str, Any]) -> dict[str, str]:
 
 def render_episode_draft(template: dict[str, Any], context: dict[str, str]) -> dict[str, Any]:
     values = SafeFormatDict(context)
+    script = template["script_template"].format_map(values)
+    if CTA not in script:
+        script += CTA
     return {
         "episode": template["episode"],
         "slug": template["slug"],
         "title": template["title_template"].format_map(values),
         "single_theme": template["single_theme"],
-        "script": template["script_template"].format_map(values),
+        "script": script,
         "required_data": template["required_data"],
         "visual_cards": template["visual_cards"],
         "risk_point": template["risk_point"].format_map(values),
