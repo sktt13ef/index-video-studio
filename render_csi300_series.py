@@ -631,7 +631,7 @@ PlayResY: 1920
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Default,Microsoft YaHei,38,&H00FFFFFF,&H000000FF,&H6A12201B,&HAA12201B,1,0,0,0,100,100,0,0,1,3,0,2,76,76,360,1
+Style: Default,Microsoft YaHei,38,&H00FFFFFF,&H000000FF,&H6A12201B,&HAA12201B,1,0,0,0,100,100,0,0,1,3,0,2,76,76,260,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text

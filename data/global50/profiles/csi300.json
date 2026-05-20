@@ -1,7 +1,7 @@
 {
   "index_id": "csi300",
   "data_status": "ready",
-  "render_status": "ready_for_review",
+  "render_status": "approved_for_sample",
   "missing_items": [],
   "basic_info": {
     "index_name_cn": "沪深300",
@@ -431,5 +431,6 @@
     "历史收益和最大回撤由公开日线点位计算。",
     "PE/PB 区间和分位由公开估值历史序列计算。"
   ],
-  "review_status": "pending"
+  "review_status": "approved",
+  "approval_notes": "人工批准生成沪深300五条样片；仅限已验证数据进入成品。"
 }

@@ -5,7 +5,7 @@ dji,道琼斯工业平均指数,Dow Jones Industrial Average,DJI,S&P Dow Jones I
 rut,罗素2000,Russell 2000,RUT,FTSE Russell,美国,US,broad_based,USD,overseas_broad_based,us,4,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据,pending
 hsi,恒生指数,Hang Seng Index,HSI,恒生指数公司,中国香港,Hong Kong,broad_based,HKD,broad_based,hongkong,5,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据,pending
 hstech,恒生科技指数,Hang Seng TECH Index,HSTECH,恒生指数公司,中国香港,Hong Kong,technology,HKD,technology_growth,hongkong,6,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据,pending
-csi300,沪深300,CSI 300,000300,中证指数,中国内地,China A-share,broad_based,CNY,broad_based,china,7,ready,ready_for_review,已补齐结构化数据；数据日期 2026年3月31日；等待人工审核批准,pending
+csi300,沪深300,CSI 300,000300,中证指数,中国内地,China A-share,broad_based,CNY,broad_based,china,7,ready,approved_for_sample,已补齐结构化数据；人工批准生成沪深300五条样片,approved
 csi500,中证500,CSI 500,CSI500,中证指数,中国内地,China A-share,broad_based,CNY,broad_based,china,8,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据,pending
 csi1000,中证1000,CSI 1000,CSI1000,中证指数,中国内地,China A-share,broad_based,CNY,broad_based,china,9,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据,pending
 csi_div,中证红利,CSI Dividend Index,CSI_DIV,中证指数,中国内地,China A-share,dividend,CNY,dividend_strategy,china,10,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据,pending
