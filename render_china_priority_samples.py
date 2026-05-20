@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import argparse
 import json
 import shutil
 import subprocess
@@ -12,6 +13,7 @@ from typing import Any
 from PIL import Image, ImageDraw, ImageFont
 
 import render_csi300_series as speech
+from src.ai_script_writer import AIScriptError, AIScriptWriter
 
 
 ROOT = Path(__file__).resolve().parent
@@ -20,7 +22,7 @@ RUNS_DIR = ROOT / "runs"
 INDEX_IDS = ["csi500", "csi1000", "csi_div"]
 SIZE = (1080, 1920)
 VOICE = "zh-CN-YunjianNeural"
-RATE = "+12%"
+RATE = "+3%"
 DISCLAIMER = "仅作指数观察，不构成投资建议；本视频由 AI 辅助生成。"
 CTA = "感谢观看，可以点点关注，继续了解更多指数观察。"
 DATA_NOTE = "数据来源：中证指数官方单张、公开历史点位和估值序列；发布前以最新公开资料为准。"
@@ -122,6 +124,18 @@ def sum_top_weight(profile: dict[str, Any]) -> str:
     return f"{sum(values):.1f}%"
 
 
+def sum_sector_weight(profile: dict[str, Any], count: int) -> str:
+    values = [pct_float(item["weight"]) for item in profile.get("sector_weights", {}).get("items", [])[:count]]
+    return f"{sum(values):.1f}%"
+
+
+def sample_count_label(method: str, holdings: list[dict[str, Any]]) -> str:
+    for token in ("1000只", "500只", "300只", "100只"):
+        if token in method:
+            return token
+    return f"{len(holdings)}项权重已追溯"
+
+
 def script_tail(text: str) -> str:
     product_closing = "最后做个小结：看指数时，不要只看名字或者单个数字，要把样本范围、权重结构、估值区间和历史回撤放在一起看。这样更容易判断它在组合里承担什么角色，也更容易理解它可能带来的波动。真正有用的指数观察，不是给出一个简单结论，而是把边界、结构和风险讲清楚。"
     if product_closing not in text:
@@ -150,6 +164,7 @@ def build_episodes(profile: dict[str, Any]) -> list[Episode]:
     top_sector = sectors[0]
     top_holding = holdings[0]
     top10_sum = sum_top_weight(profile)
+    sample_count = sample_count_label(method, holdings)
     pe = valuation.get("pe", "")
     pe_range = valuation.get("pe_range", valuation.get("valuation_range", ""))
     pe_pct = valuation.get("pe_percentile", "")
@@ -179,7 +194,7 @@ def build_episodes(profile: dict[str, Any]) -> list[Episode]:
             [
                 Scene("cover", "本条只解决一个问题", intro_angle, [name, sample], f"第一条看{name}到底跟踪什么。{intro_angle}"),
                 Scene("bullets", "指数边界", method, [sample, focus, f"调样频率：{rebalance}"], f"从指数规则看，{method}这句话的重点不是名字，而是样本范围、筛选条件和调样频率。"),
-                Scene("metrics", "三个基础信息", "先把边界看清楚，再谈权重和估值。", [("样本范围", sample), ("筛选重点", focus), ("调样频率", rebalance), ("样本数量", str(len(profile.get("top_holdings", {}).get("items", []))) + "项权重已追溯")], f"理解{name}，先记住三点：样本范围是{sample}，筛选重点是{focus}，调样频率是{rebalance}。"),
+                Scene("metrics", "三个基础信息", "先把边界看清楚，再谈权重和估值。", [("样本范围", sample), ("筛选重点", focus), ("调样频率", rebalance), ("样本数量", sample_count)], f"理解{name}，先记住三点：样本范围是{sample}，筛选重点是{focus}，调样频率是{rebalance}。"),
                 Scene("bullets", "这一条的结论", "它回答的是一类资产表现，不回答所有问题。", [f"{name}有清楚的样本边界", "下一步看行业和前十大", "不要只凭指数名称判断"], script_tail(f"这一条的结论是：{name}有明确边界。先确认它代表哪类公司，再看行业权重、前十大和估值位置。")),
             ],
         ),
@@ -385,11 +400,22 @@ def write_json(path: Path, data: Any) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
-def render_episode(profile: dict[str, Any], episode: Episode, index_dir: Path) -> dict[str, Any]:
+def ensure_episode_ending(episode: Episode) -> None:
+    tail = DISCLAIMER + CTA
+    if episode.scenes and DISCLAIMER not in episode.scenes[-1].narration:
+        episode.scenes[-1].narration += tail
+    elif episode.scenes and CTA not in episode.scenes[-1].narration:
+        episode.scenes[-1].narration += CTA
+
+
+def render_episode(profile: dict[str, Any], episode: Episode, index_dir: Path, script_meta: dict[str, Any] | None = None) -> dict[str, Any]:
     episode_dir = index_dir / f"episode_{episode.number:02d}_{episode.slug}"
     episode_dir.mkdir(parents=True, exist_ok=True)
     segments: list[Path] = []
+    ensure_episode_ending(episode)
     script = "".join(scene.narration for scene in episode.scenes)
+    if script_meta:
+        write_json(episode_dir / "ai_script.json", script_meta)
     for i, scene in enumerate(episode.scenes, 1):
         slide = episode_dir / f"scene_{i:02d}.png"
         draw_scene(slide, profile, episode, scene, i)
@@ -429,6 +455,9 @@ def render_episode(profile: dict[str, Any], episode: Episode, index_dir: Path) -
             {"label": item["name"], "value": item["weight"], "category": "sector_weight", "source_id": "csi_factsheet"} for item in profile["sector_weights"]["items"][:5]
         ] + [
             {"label": item["name"], "value": item["weight"], "category": "holding_weight", "source_id": "constituent_weight_series"} for item in profile["top_holdings"]["items"][:8]
+        ] + [
+            {"label": "前两大行业合计", "value": sum_sector_weight(profile, 2), "category": "derived_sector_weight_sum", "source_id": "csi_factsheet", "calculation_method": "行业权重TOP1+TOP2。"},
+            {"label": "前三大行业合计", "value": sum_sector_weight(profile, 3), "category": "derived_sector_weight_sum", "source_id": "csi_factsheet", "calculation_method": "行业权重TOP1+TOP2+TOP3。"},
         ]
     if episode.number == 4:
         data_used["numbers"] = [
@@ -453,6 +482,7 @@ def render_episode(profile: dict[str, Any], episode: Episode, index_dir: Path) -
             "script": script,
             "voice": VOICE,
             "rate": RATE,
+            "script_generation": script_meta or {"mode": "template", "provider": "local_template"},
             "data_date": profile.get("data_date"),
             "source_items": profile.get("source_items", []),
             "quality_check_result": quality,
@@ -480,13 +510,27 @@ def write_report(run_dir: Path, results: list[dict[str, Any]]) -> None:
     (run_dir / "sample_report.html").write_text(html, encoding="utf-8")
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Render approved China priority index videos.")
+    parser.add_argument("--ai-scripts", action="store_true", help="Use local AI to write each episode narration independently.")
+    parser.add_argument("--llm-model", default=None, help="Ollama model name, for example qwen3:14b.")
+    parser.add_argument("--template-fallback", action="store_true", help="Use template narration if AI writing fails.")
+    parser.add_argument("--index", dest="index_ids", action="append", choices=INDEX_IDS, help="Render only one index; can be used more than once.")
+    parser.add_argument("--episode", type=int, choices=[1, 2, 3, 4, 5], help="Render only one episode number.")
+    parser.add_argument("--output-prefix", default="china_priority_products", help="Run output directory prefix.")
+    return parser.parse_args()
+
+
 def main() -> None:
+    args = parse_args()
     if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
         raise RuntimeError("需要 ffmpeg 和 ffprobe")
-    run_dir = RUNS_DIR / f"china_priority_products_{datetime.now():%Y%m%d_%H%M%S}"
+    writer = AIScriptWriter(model=args.llm_model) if args.ai_scripts else None
+    run_dir = RUNS_DIR / f"{args.output_prefix}_{datetime.now():%Y%m%d_%H%M%S}"
     run_dir.mkdir(parents=True, exist_ok=False)
     results: list[dict[str, Any]] = []
-    for index_id in INDEX_IDS:
+    target_ids = args.index_ids or INDEX_IDS
+    for index_id in target_ids:
         profile = load_profile(index_id)
         if profile.get("data_status") != "ready" or profile.get("review_status") != "approved":
             raise RuntimeError(f"{index_id} is not ready/approved")
@@ -494,8 +538,33 @@ def main() -> None:
         index_dir.mkdir(parents=True, exist_ok=True)
         write_json(index_dir / "profile.json", profile)
         for episode in build_episodes(profile):
+            if args.episode and episode.number != args.episode:
+                continue
+            script_meta: dict[str, Any] | None = None
+            if writer:
+                print(f"Writing AI script {index_id} {episode.number}/5 {episode.title}", flush=True)
+                try:
+                    episode, ai_result = writer.rewrite_episode(profile, episode)
+                    script_meta = {
+                        "mode": "ai_per_episode",
+                        "provider": ai_result.provider,
+                        "model": ai_result.model,
+                        "attempts": ai_result.attempts,
+                        "checks": ai_result.checks,
+                        "scene_narrations": ai_result.scene_narrations,
+                        "prompt": ai_result.prompt,
+                        "raw_response": ai_result.raw_response,
+                    }
+                except AIScriptError as exc:
+                    if not args.template_fallback:
+                        raise
+                    script_meta = {
+                        "mode": "template_fallback_after_ai_error",
+                        "provider": "local_template",
+                        "error": str(exc),
+                    }
             print(f"Rendering {index_id} {episode.number}/5 {episode.title}", flush=True)
-            item = render_episode(profile, episode, index_dir)
+            item = render_episode(profile, episode, index_dir, script_meta)
             item["index_id"] = index_id
             item["index_name"] = profile["basic_info"]["index_name_cn"]
             item["relative_final"] = str(Path(item["final"]).relative_to(run_dir)).replace("\\", "/")
