@@ -1,0 +1,275 @@
+{
+  "generated_at": "2026-05-20T16:50:47",
+  "results": [
+    {
+      "index_id": "spx",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 14216,
+      "history_latest": "2026-05-19",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "ndx",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 10237,
+      "history_latest": "2026-05-19",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "dji",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 8656,
+      "history_latest": "2026-05-19",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "rut",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 9746,
+      "history_latest": "2026-05-19",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "hsi",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 9718,
+      "history_latest": "2026-05-20",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "hstech",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 1405,
+      "history_latest": "2026-05-20",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "csi500",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights"
+      ],
+      "history_rows": 4858,
+      "history_latest": "2026-05-20",
+      "top_holdings": 10,
+      "valuation_items": 4
+    },
+    {
+      "index_id": "csi1000",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights"
+      ],
+      "history_rows": 3158,
+      "history_latest": "2026-05-20",
+      "top_holdings": 10,
+      "valuation_items": 4
+    },
+    {
+      "index_id": "csi_div",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights"
+      ],
+      "history_rows": 4614,
+      "history_latest": "2026-05-20",
+      "top_holdings": 10,
+      "valuation_items": 4
+    },
+    {
+      "index_id": "n225",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 13861,
+      "history_latest": "2026-05-20",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "topix",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 4509,
+      "history_latest": "2026-05-20",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "kospi",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 7246,
+      "history_latest": "2026-05-20",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "asx200",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 8465,
+      "history_latest": "2026-05-20",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "stoxx50e",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 4795,
+      "history_latest": "2026-05-20",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "dax",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 9705,
+      "history_latest": "2026-05-20",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "ftse100",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 10705,
+      "history_latest": "2026-05-20",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "cac40",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 9197,
+      "history_latest": "2026-05-20",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "msci_world",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 3608,
+      "history_latest": "2026-05-19",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "msci_em",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 5812,
+      "history_latest": "2026-05-19",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "agg",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 5696,
+      "history_latest": "2026-05-19",
+      "top_holdings": 0,
+      "valuation_items": 3
+    },
+    {
+      "index_id": "gsci",
+      "data_status": "needs_data",
+      "missing_items": [
+        "methodology_manual_parse",
+        "sector_weights",
+        "top_holdings"
+      ],
+      "history_rows": 4988,
+      "history_latest": "2026-05-19",
+      "top_holdings": 0,
+      "valuation_items": 3
+    }
+  ]
+}

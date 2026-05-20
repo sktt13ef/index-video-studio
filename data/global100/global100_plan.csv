@@ -1,26 +1,26 @@
 ﻿index_id,index_name_cn,index_name_en,index_code,provider,region,market,index_type,currency,template_type,style_theme,priority,data_status,render_status,notes,review_status
-spx,标普500,S&P 500,SPX,S&P Dow Jones Indices,美国,US,broad_based,USD,overseas_broad_based,us,1,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-ndx,纳斯达克100,Nasdaq-100,NDX,Nasdaq,美国,US,technology,USD,technology_growth,us,2,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-dji,道琼斯工业平均指数,Dow Jones Industrial Average,DJI,S&P Dow Jones Indices,美国,US,broad_based,USD,overseas_broad_based,us,3,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-rut,罗素2000,Russell 2000,RUT,FTSE Russell,美国,US,broad_based,USD,overseas_broad_based,us,4,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-hsi,恒生指数,Hang Seng Index,HSI,恒生指数公司,中国香港,Hong Kong,broad_based,HKD,broad_based,hongkong,5,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-hstech,恒生科技指数,Hang Seng TECH Index,HSTECH,恒生指数公司,中国香港,Hong Kong,technology,HKD,technology_growth,hongkong,6,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
+spx,标普500,S&P 500,SPX,S&P Dow Jones Indices,美国,US,broad_based,USD,overseas_broad_based,us,1,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+ndx,纳斯达克100,Nasdaq-100,NDX,Nasdaq,美国,US,technology,USD,technology_growth,us,2,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+dji,道琼斯工业平均指数,Dow Jones Industrial Average,DJI,S&P Dow Jones Indices,美国,US,broad_based,USD,overseas_broad_based,us,3,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+rut,罗素2000,Russell 2000,RUT,FTSE Russell,美国,US,broad_based,USD,overseas_broad_based,us,4,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+hsi,恒生指数,Hang Seng Index,HSI,恒生指数公司,中国香港,Hong Kong,broad_based,HKD,broad_based,hongkong,5,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+hstech,恒生科技指数,Hang Seng TECH Index,HSTECH,恒生指数公司,中国香港,Hong Kong,technology,HKD,technology_growth,hongkong,6,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
 csi300,沪深300,CSI 300,CSI300,中证指数,中国内地,China A-share,broad_based,CNY,broad_based,china,7,ready,approved_for_sample,已继承沪深300结构化数据；已人工批准样片。,approved
-csi500,中证500,CSI 500,CSI500,中证指数,中国内地,China A-share,broad_based,CNY,broad_based,china,8,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-csi1000,中证1000,CSI 1000,CSI1000,中证指数,中国内地,China A-share,broad_based,CNY,broad_based,china,9,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-csi_div,中证红利,CSI Dividend Index,CSI_DIV,中证指数,中国内地,China A-share,dividend,CNY,dividend_strategy,china,10,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-n225,日经225,Nikkei 225,N225,Nikkei,日本,Japan,broad_based,JPY,overseas_broad_based,asia,11,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-topix,东证指数,TOPIX,TOPIX,JPX Market Innovation,日本,Japan,broad_based,JPY,overseas_broad_based,asia,12,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-kospi,韩国综合指数,KOSPI Composite Index,KOSPI,KRX,韩国,Korea,broad_based,KRW,overseas_broad_based,asia,13,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-asx200,澳洲标普200,S&P/ASX 200,ASX200,S&P Dow Jones Indices,澳大利亚,Australia,broad_based,AUD,overseas_broad_based,asia,14,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-stoxx50e,欧洲斯托克50,EURO STOXX 50,STOXX50E,STOXX,欧元区,Eurozone,broad_based,EUR,overseas_broad_based,europe,15,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-dax,德国DAX,DAX,DAX,STOXX/Qontigo,德国,Germany,broad_based,EUR,overseas_broad_based,europe,16,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-ftse100,富时100,FTSE 100,FTSE100,FTSE Russell,英国,United Kingdom,broad_based,GBP,overseas_broad_based,europe,17,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-cac40,法国CAC40,CAC 40,CAC40,Euronext,法国,France,broad_based,EUR,overseas_broad_based,europe,18,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-msci_world,MSCI全球指数,MSCI World Index,MSCI_WORLD,MSCI,全球发达市场,Global developed,broad_based,multi_currency,overseas_broad_based,global,19,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-msci_em,MSCI新兴市场指数,MSCI Emerging Markets Index,MSCI_EM,MSCI,全球新兴市场,Global emerging,broad_based,multi_currency,overseas_broad_based,global,20,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-agg,彭博全球综合债券指数,Bloomberg Global Aggregate Bond Index,AGG,Bloomberg,全球,Global,bond,multi_currency,bond,bond,21,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
-gsci,标普高盛商品指数,S&P GSCI,GSCI,S&P Dow Jones Indices,全球,Global,commodity,multi_currency,commodity,commodity,22,needs_data,blocked_until_ready,目录级资料已建立；等待结构化生产数据。,pending
+csi500,中证500,CSI 500,CSI500,中证指数,中国内地,China A-share,broad_based,CNY,broad_based,china,8,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights",pending
+csi1000,中证1000,CSI 1000,CSI1000,中证指数,中国内地,China A-share,broad_based,CNY,broad_based,china,9,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights",pending
+csi_div,中证红利,CSI Dividend Index,CSI_DIV,中证指数,中国内地,China A-share,dividend,CNY,dividend_strategy,china,10,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights",pending
+n225,日经225,Nikkei 225,N225,Nikkei,日本,Japan,broad_based,JPY,overseas_broad_based,asia,11,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+topix,东证指数,TOPIX,TOPIX,JPX Market Innovation,日本,Japan,broad_based,JPY,overseas_broad_based,asia,12,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+kospi,韩国综合指数,KOSPI Composite Index,KOSPI,KRX,韩国,Korea,broad_based,KRW,overseas_broad_based,asia,13,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+asx200,澳洲标普200,S&P/ASX 200,ASX200,S&P Dow Jones Indices,澳大利亚,Australia,broad_based,AUD,overseas_broad_based,asia,14,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+stoxx50e,欧洲斯托克50,EURO STOXX 50,STOXX50E,STOXX,欧元区,Eurozone,broad_based,EUR,overseas_broad_based,europe,15,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+dax,德国DAX,DAX,DAX,STOXX/Qontigo,德国,Germany,broad_based,EUR,overseas_broad_based,europe,16,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+ftse100,富时100,FTSE 100,FTSE100,FTSE Russell,英国,United Kingdom,broad_based,GBP,overseas_broad_based,europe,17,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+cac40,法国CAC40,CAC 40,CAC40,Euronext,法国,France,broad_based,EUR,overseas_broad_based,europe,18,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+msci_world,MSCI全球指数,MSCI World Index,MSCI_WORLD,MSCI,全球发达市场,Global developed,broad_based,multi_currency,overseas_broad_based,global,19,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+msci_em,MSCI新兴市场指数,MSCI Emerging Markets Index,MSCI_EM,MSCI,全球新兴市场,Global emerging,broad_based,multi_currency,overseas_broad_based,global,20,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+agg,彭博全球综合债券指数,Bloomberg Global Aggregate Bond Index,AGG,Bloomberg,全球,Global,bond,multi_currency,bond,bond,21,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
+gsci,标普高盛商品指数,S&P GSCI,GSCI,S&P Dow Jones Indices,全球,Global,commodity,multi_currency,commodity,commodity,22,needs_data,partially_enriched_needs_review,"已补历史走势、年度收益、最大回撤和区间数据；仍缺：methodology_manual_parse, sector_weights, top_holdings",pending
 g0001,FTSE Russell 美国大盘核心公司指数,G0001,G0001,FTSE Russell,美国,US,broad_based,USD,overseas_broad_based,us,23,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品。,pending
 g0013,中证指数 中国内地大盘核心公司指数,G0013,G0013,中证指数,中国内地,China A-share,broad_based,CNY,broad_based,china,24,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品。,pending
 g0025,FTSE Russell 中国香港大盘核心公司指数,G0025,G0025,FTSE Russell,中国香港,Hong Kong,broad_based,HKD,broad_based,hongkong,25,needs_review,blocked_until_ready,候选指数身份需人工核验；不可直接生成成品。,pending

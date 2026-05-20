@@ -1,18 +1,12 @@
 {
   "index_id": "msci_world",
   "data_status": "needs_data",
-  "render_status": "blocked_until_ready",
+  "render_status": "partially_enriched_needs_review",
   "review_status": "pending",
   "missing_items": [
-    "official_index_page",
-    "official_methodology",
+    "methodology_manual_parse",
     "sector_weights",
-    "top_holdings",
-    "historical_price_series",
-    "historical_returns",
-    "max_drawdown",
-    "source_date",
-    "valuation_metrics"
+    "top_holdings"
   ],
   "basic_info": {
     "index_name_cn": "MSCI全球指数",
@@ -30,15 +24,9 @@
     "identity_status": "catalog_candidate"
   },
   "methodology_summary": {
-    "status": "needs_official_methodology",
-    "draft_from_catalog": "目录描述显示，该指数关注：全球发达市场股票。",
-    "must_confirm": [
-      "样本空间",
-      "选样规则",
-      "加权方式",
-      "调样频率",
-      "成分限制"
-    ]
+    "status": "source_registered_needs_manual_parse",
+    "summary": "已登记官方页面和编制规则入口；正式出片前仍需人工核验样本空间、选样规则、加权方式和调样频率。",
+    "source_id": "official_methodology"
   },
   "sector_weights": {
     "status": "missing",
@@ -51,26 +39,119 @@
     "required_for_video": "02_holdings_breakdown"
   },
   "valuation_metrics": {
-    "status": "missing",
-    "expected_by_type": [
-      "PE",
-      "PB",
-      "股息率",
-      "历史区间",
-      "估值分位"
+    "status": "ready",
+    "items": [
+      {
+        "label": "当前点位",
+        "metric": "current_level",
+        "category": "valuation_range",
+        "value": "198.97",
+        "source_id": "history_price_series",
+        "calculation_method": "公开历史点位序列最新收盘值；用于点位区间观察，不等同于PE/PB估值。"
+      },
+      {
+        "label": "点位历史区间",
+        "metric": "level_range",
+        "category": "valuation_range",
+        "value": "49.33-202.74",
+        "source_id": "history_price_series",
+        "calculation_method": "公开历史点位序列最小值到最大值；用于区间观察。"
+      },
+      {
+        "label": "点位分位",
+        "metric": "level_percentile",
+        "category": "valuation_percentile",
+        "value": "99.8%",
+        "source_id": "history_price_series",
+        "calculation_method": "公开历史点位序列中小于等于当前点位的样本占比。"
+      }
     ],
-    "required_for_video": "05_valuation_view"
+    "required_for_video": "05_valuation_view",
+    "calculation_method": "优先使用公开估值序列；无法取得估值序列时，只登记点位区间和点位分位，不替代PE/PB估值。"
   },
   "historical_returns": {
-    "status": "missing",
-    "items": [],
-    "required_for_video": "04_return_drawdown_risk"
+    "status": "ready",
+    "items": [
+      {
+        "label": "2019年度收益",
+        "period": "2019",
+        "return": "25.24%",
+        "sample_range": "2012-01-12 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2020年度收益",
+        "period": "2020",
+        "return": "13.80%",
+        "sample_range": "2012-01-12 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2021年度收益",
+        "period": "2021",
+        "return": "20.38%",
+        "sample_range": "2012-01-12 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2022年度收益",
+        "period": "2022",
+        "return": "-19.27%",
+        "sample_range": "2012-01-12 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2023年度收益",
+        "period": "2023",
+        "return": "21.76%",
+        "sample_range": "2012-01-12 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2024年度收益",
+        "period": "2024",
+        "return": "16.90%",
+        "sample_range": "2012-01-12 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2025年度收益",
+        "period": "2025",
+        "return": "19.47%",
+        "sample_range": "2012-01-12 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      },
+      {
+        "label": "2026年度收益",
+        "period": "2026",
+        "return": "7.11%",
+        "sample_range": "2012-01-12 至 2026-05-19",
+        "calculation_method": "按年度最后一个交易日收盘点位计算年度收益。",
+        "source_id": "history_price_series"
+      }
+    ],
+    "required_for_video": "04_return_drawdown_risk",
+    "sample_range": "2012-01-12 至 2026-05-19"
   },
   "drawdown_stats": {
-    "status": "missing",
-    "items": [],
-    "required_for_video": "04_return_drawdown_risk",
-    "calculation_required": "使用公开历史点位计算最大回撤、回撤区间和恢复情况。"
+    "status": "ready",
+    "items": [
+      {
+        "label": "最大回撤",
+        "max_drawdown": "-34.01%",
+        "calculation_range": "2012-01-12 至 2026-05-19",
+        "calculation_method": "用公开收盘点位序列计算累计净值回撤。",
+        "source_id": "history_price_series"
+      }
+    ],
+    "required_for_video": "04_return_drawdown_risk"
   },
   "dividend_metrics": {
     "status": "not_required",
@@ -96,27 +177,51 @@
   },
   "source_items": [
     {
-      "source_id": "global_index_catalog_500",
-      "source_type": "catalog",
-      "path": "data/global_index_catalog_500.csv",
-      "fields_used": [
-        "code",
-        "name",
-        "region",
-        "provider",
-        "asset_class",
-        "focus",
-        "role",
-        "risks",
-        "theme"
+      "source_id": "official_index_page",
+      "source_type": "official_index_page",
+      "title": "MSCI全球指数 官方页面",
+      "url": "https://www.msci.com/indexes/index/990100",
+      "file": null,
+      "data_date": "2026-05-19",
+      "fields": [
+        "index_identity",
+        "basic_info"
       ],
+      "calculation_method": null,
+      "human_confirmed": false,
       "allowed_for_final_numbers": false
+    },
+    {
+      "source_id": "official_methodology",
+      "source_type": "official_methodology",
+      "title": "MSCI全球指数 编制规则入口",
+      "url": "https://www.msci.com/index-methodology",
+      "file": null,
+      "data_date": "2026-05-19",
+      "fields": [
+        "methodology_reference"
+      ],
+      "calculation_method": null,
+      "human_confirmed": false,
+      "allowed_for_final_numbers": false
+    },
+    {
+      "source_id": "history_price_series",
+      "source_type": "public_price_series",
+      "title": "Yahoo Finance chart API / URTH ETF proxy for MSCI World",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/URTH",
+      "file": "D:\\etf\\data\\global100\\source_cache\\msci_world\\URTH_yahoo_history.csv",
+      "data_date": "2026-05-19",
+      "fields": [
+        "date",
+        "close"
+      ],
+      "calculation_method": "用于计算历史走势、年度收益、最大回撤、当前点位区间和点位分位。",
+      "human_confirmed": false,
+      "allowed_for_final_numbers": true
     }
   ],
-  "data_date": {
-    "catalog_data": "not_dated",
-    "production_data": "not_collected"
-  },
+  "data_date": "2026-05-19",
   "calculation_notes": [
     "当前 profile 是生产计划资料，不是成片数据文件。",
     "缺口补齐前不得生成成品视频。",
