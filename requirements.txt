@@ -5,6 +5,7 @@ pandas
 pdfplumber
 pillow
 pydantic
+pyyaml
 requests
 uvicorn[standard]
 xlrd
