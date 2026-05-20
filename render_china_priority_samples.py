@@ -371,7 +371,7 @@ def draw_scene(path: Path, profile: dict[str, Any], episode: Episode, scene: Sce
         max_value = max(pct_float(item["weight"]) for item in scene.items[:5])
         donut_values = [pct_float(item["weight"]) for item in scene.items[:5]]
         donut_labels = [str(item["name"]) for item in scene.items[:5]]
-        draw_donut(draw, (260, y + 250), 150, donut_values, donut_labels, theme)
+        draw_donut(draw, (250, y + 200), 122, donut_values, donut_labels, theme)
         bx = 470
         for item in scene.items[:5]:
             value = pct_float(item["weight"])
@@ -380,33 +380,28 @@ def draw_scene(path: Path, profile: dict[str, Any], episode: Episode, scene: Sce
             bar_w = int(390 * value / max_value)
             draw.rounded_rectangle((bx, y + 52, bx + 390, y + 78), radius=13, fill=theme["soft"])
             draw.rounded_rectangle((bx, y + 52, bx + bar_w, y + 78), radius=13, fill=theme["blue"])
-            y += 102
+            y += 84
     elif scene.kind == "table":
-        draw.rounded_rectangle((74, y, 1006, y + 610), radius=18, fill="#ffffff", outline=theme["line"], width=2)
+        draw.rounded_rectangle((74, y, 1006, y + 430), radius=18, fill="#ffffff", outline=theme["line"], width=2)
         draw.text((110, y + 30), "名称", fill=theme["blue"], font=F_SMALL)
         draw.text((620, y + 30), "权重", fill=theme["blue"], font=F_SMALL)
-        row_y = y + 84
-        for item in scene.items[:8]:
+        row_y = y + 76
+        for item in scene.items[:6]:
             draw.text((110, row_y), str(item["name"])[:12], fill=theme["ink"], font=F_SMALL)
             draw.text((620, row_y), str(item["weight"]), fill=theme["ink"], font=F_SMALL)
-            row_y += 62
+            row_y += 54
     elif scene.kind == "metrics":
         labels = [str(item[0]) for item in scene.items[:4]]
         values = [str(item[1]) for item in scene.items[:4]]
         if any("分位" in label for label in labels):
-            draw.rounded_rectangle((74, y, 1006, y + 420), radius=20, fill="#ffffff", outline=theme["line"], width=2)
-            for i, (label, value) in enumerate(scene.items[:3]):
-                x = 116 + i * 285
-                draw.text((x, y + 46), str(label), fill=theme["blue"], font=F_SMALL)
-                draw_wrapped(draw, str(value), (x, y + 96), 240, F_H2 if i == 0 else F_BODY, theme["ink"], 6, 2)
+            draw.rounded_rectangle((74, y, 1006, y + 390), radius=20, fill="#ffffff", outline=theme["line"], width=2)
+            for i, (label, value) in enumerate(scene.items[:4]):
+                x = 116 + (i % 2) * 440
+                yy = y + 34 + (i // 2) * 112
+                draw.text((x, yy), str(label), fill=theme["blue"], font=F_SMALL)
+                draw_wrapped(draw, str(value), (x, yy + 44), 355, F_BODY, theme["ink"], 6, 1)
             pct = next((v for l, v in zip(labels, values, strict=False) if "分位" in l), "")
-            draw_valuation_gauge(draw, 132, y + 286, 780, pct, theme)
-            y += 470
-            if len(scene.items) > 3:
-                label, value = scene.items[3]
-                draw.rounded_rectangle((74, y, 1006, y + 150), radius=18, fill=theme["soft"], outline=theme["line"], width=2)
-                draw.text((112, y + 34), str(label), fill=theme["blue"], font=F_SMALL)
-                draw_wrapped(draw, str(value), (112, y + 82), 820, F_BODY, theme["ink"], 6, 2)
+            draw_valuation_gauge(draw, 132, y + 304, 780, pct, theme)
         else:
             for i, (label, value) in enumerate(scene.items[:4]):
                 x = 74 if i % 2 == 0 else 548
@@ -423,19 +418,19 @@ def draw_scene(path: Path, profile: dict[str, Any], episode: Episode, scene: Sce
             draw_wrapped(draw, value, (x - 40, y + 208), 230, F_SMALL, theme["muted"], 8, 3)
     elif scene.kind == "history":
         returns = [(str(item["period"]), pct_float(item["return"])) for item in scene.items]
-        chart = (96, y + 10, 984, y + 590)
-        zero = y + 320
+        chart = (96, y + 10, 984, y + 450)
+        zero = y + 260
         draw.rounded_rectangle(chart, radius=20, fill="#ffffff", outline=theme["line"], width=2)
         for k in range(5):
-            yy = y + 90 + k * 92
+            yy = y + 70 + k * 74
             draw.line((132, yy, 944, yy), fill=theme["soft"], width=2)
         draw.line((132, zero, 944, zero), fill=theme["line"], width=3)
         step = 820 // max(1, len(returns) - 1)
         points = []
         for i, (year, value) in enumerate(returns):
             x = 142 + i * step
-            yy = zero - int(value * 6)
-            yy = max(y + 70, min(y + 548, yy))
+            yy = zero - int(value * 4.4)
+            yy = max(y + 62, min(y + 414, yy))
             points.append((x, yy))
             draw.line((x, zero, x, yy), fill=theme["soft"], width=14)
             draw.ellipse((x - 8, yy - 8, x + 8, yy + 8), fill=theme["accent"])
@@ -478,11 +473,15 @@ def raise_subtitle_safe_area(path: Path) -> None:
     content = path.read_text(encoding="utf-8-sig")
     content = content.replace(
         "Style: Default,Microsoft YaHei,38,&H00FFFFFF,&H000000FF,&H6A12201B,&HAA12201B,1,0,0,0,100,100,0,0,1,3,0,2,76,76,260,1",
-        "Style: Default,Noto Sans SC,34,&H00857066,&H000000FF,&H00FCF8F7,&H00FCF8F7,1,0,0,0,100,100,0,0,1,2,0,2,110,110,420,1",
+        "Style: Default,Noto Sans SC,40,&H00201811,&H000000FF,&H00F7F8FC,&H00F7F8FC,1,0,0,0,100,100,0,0,3,10,0,2,120,120,350,1",
     )
     content = content.replace(
         "Style: Default,Microsoft YaHei,36,&H00FFFFFF,&H000000FF,&H6A12201B,&HAA12201B,1,0,0,0,100,100,0,0,1,3,0,2,76,76,405,1",
+        "Style: Default,Noto Sans SC,40,&H00201811,&H000000FF,&H00F7F8FC,&H00F7F8FC,1,0,0,0,100,100,0,0,3,10,0,2,120,120,350,1",
+    )
+    content = content.replace(
         "Style: Default,Noto Sans SC,34,&H00857066,&H000000FF,&H00FCF8F7,&H00FCF8F7,1,0,0,0,100,100,0,0,1,2,0,2,110,110,420,1",
+        "Style: Default,Noto Sans SC,40,&H00201811,&H000000FF,&H00F7F8FC,&H00F7F8FC,1,0,0,0,100,100,0,0,3,10,0,2,120,120,350,1",
     )
     path.write_text(content, encoding="utf-8-sig")
 
