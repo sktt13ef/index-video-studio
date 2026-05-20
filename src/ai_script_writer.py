@@ -336,8 +336,9 @@ def validate_narrations(narrations: list[str], allowed_text: str = "") -> dict[s
         issues.append("出现具体年份或年月日。")
     allowed_numbers = set(re.findall(r"\d+(?:\.\d+)?%?", allowed_text))
     allowed_normalized = {_normalize_number(item) for item in allowed_numbers}
+    allowed_variants = _number_variants(allowed_numbers)
     for number in re.findall(r"\d+(?:\.\d+)?%?", joined):
-        if number not in allowed_numbers and _normalize_number(number) not in allowed_normalized:
+        if number not in allowed_numbers and _normalize_number(number) not in allowed_normalized and number not in allowed_variants:
             issues.append(f"出现未在数据包中的数字：{number}")
     for i, text in enumerate(narrations, 1):
         length = len(text)
@@ -359,3 +360,18 @@ def _normalize_number(value: str) -> str:
         return f"{float(raw):.4f}{suffix}"
     except ValueError:
         return value
+
+
+def _number_variants(values: set[str]) -> set[str]:
+    variants: set[str] = set()
+    for value in values:
+        if not value.endswith("%"):
+            continue
+        raw = value[:-1]
+        try:
+            numeric = float(raw)
+        except ValueError:
+            continue
+        variants.add(f"{int(numeric)}%")
+        variants.add(f"{round(numeric)}%")
+    return variants

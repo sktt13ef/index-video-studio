@@ -19,7 +19,7 @@ from src.ai_script_writer import AIScriptError, AIScriptWriter
 ROOT = Path(__file__).resolve().parent
 PROFILE_DIR = ROOT / "data" / "global100" / "profiles"
 RUNS_DIR = ROOT / "runs"
-INDEX_IDS = ["csi500", "csi1000", "csi_div"]
+INDEX_IDS = ["csi300", "csi500", "csi1000", "csi_div"]
 SIZE = (1080, 1920)
 VOICE = "zh-CN-YunjianNeural"
 RATE = "+3%"
@@ -574,7 +574,7 @@ def main() -> None:
         {
             "created_at": datetime.now().isoformat(timespec="seconds"),
             "run_dir": str(run_dir),
-            "index_count": len(INDEX_IDS),
+            "index_count": len(set(item["index_id"] for item in results)),
             "episode_count": len(results),
             "all_passed": all(item["quality"]["passed"] for item in results),
             "episodes": results,
